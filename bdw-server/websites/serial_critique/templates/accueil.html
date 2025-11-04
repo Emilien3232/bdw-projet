@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h2>Le site de critique sur les séries pour le cours de BDW</h2>
+
+<p id="parag_description">
+	paragraphes de description du site avec des mots conviviaux et chaleureux.
+	<br>
+	Utilisez le menu à gauche pour découvrir les fonctionnalités de ce site.
+</p>
+
+<p>liste ?</p>
+<ul>
+	<li>bla</li>
+	<li>bla</li>
+	<li>...</li>
+</ul>
+
+<div>
+	<img src="{{ SESSION['DIRECTORY'] }}/static/img/sheep.png" height="150%" width="150%"/>
+</div>
+
+{% include 'message.html' %}
+
+{% endblock %}

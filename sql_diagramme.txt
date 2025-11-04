@@ -1,0 +1,66 @@
+DROP SCHEMA IF EXISTS PROJET CASCADE;
+CREATE SCHEMA PROJET;
+SET SEARCH_PATH TO PROJET;
+
+CREATE TABLE equipe(
+   ID_Equipe INT,
+   couleur VARCHAR(7) NOT NULL,
+   Date_Creation timestamp NOT NULL,
+   PRIMARY KEY(ID_Equipe),
+   UNIQUE(couleur)
+);
+
+CREATE TABLE configuration(
+   id_configuration INT,
+   nb_tours_max INT NOT NULL,
+   dimension INT NOT NULL,
+   date_creation timestamp NOT NULL,
+   PRIMARY KEY(id_configuration)
+);
+
+CREATE TABLE morpion(
+   id_morpion INT,
+   nom VARCHAR(50) NOT NULL,
+   image VARCHAR(50),
+   points_de_vie INT NOT NULL,
+   points_de_mana INT NOT NULL,
+   points_de_reussite INT NOT NULL,
+   PRIMARY KEY(id_morpion)
+);
+
+CREATE TABLE partie(
+   ID_Partie INT,
+   date_debut timestamp NOT NULL,
+   date_fin timestamp,
+   id_configuration INT NOT NULL,
+   ID_Equipe INT,
+   PRIMARY KEY(ID_Partie),
+   FOREIGN KEY(id_configuration) REFERENCES configuration(id_configuration),
+   FOREIGN KEY(ID_Equipe) REFERENCES equipe(ID_Equipe)
+);
+
+CREATE TABLE ligne_journal(
+   id_ligne INT,
+   date_action timestamp NOT NULL,
+   description VARCHAR(50) NOT NULL,
+   ID_Partie INT,
+   PRIMARY KEY(id_ligne),
+   FOREIGN KEY(ID_Partie) REFERENCES partie(ID_Partie)
+);
+
+CREATE TABLE PARTICIPER(
+   ID_Partie INT,
+   ID_Equipe INT,
+   PRIMARY KEY(ID_Partie, ID_Equipe),
+   FOREIGN KEY(ID_Partie) REFERENCES partie(ID_Partie),
+   FOREIGN KEY(ID_Equipe) REFERENCES equipe(ID_Equipe)
+);
+
+CREATE TABLE COMPOSER(
+   ID_Equipe INT,
+   id_morpion INT,
+   PRIMARY KEY(ID_Equipe, id_morpion),
+   FOREIGN KEY(ID_Equipe) REFERENCES equipe(ID_Equipe),
+   FOREIGN KEY(id_morpion) REFERENCES morpion(id_morpion)
+);
+

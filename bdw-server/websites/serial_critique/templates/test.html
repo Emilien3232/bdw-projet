@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h2>Mini-Jeu : Absorbeur de Particules</h2>
+
+<div class="game-container">
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+</div>
+
+<div class="game-info">
+    <p>Utilisez les touches flèches pour déplacer le cercle absorbant</p>
+    <p>Particules absorbées : <span id="score">0</span></p>
+</div>
+
+<div class="game-info">
+<form method="post" action="">
+    <input type="submit" value="Recharger le jeu">
+</form>
+</div>
+
+<!-- programmation en javascript, genial-->
+<script>  
+class ParticleGame {
+    constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.absorber = {
+            x: this.canvas.width / 2,
+            y: this.canvas.height / 2,
+            radius: 30,
+            speed: 5
+        };
+        this.score = 0;
+        this.keys = {};
+        
+        this.setupEventListeners();
+        this.gameLoop();
+        this.startParticleGeneration();
+    }
+
+    setupEventListeners() {
+        // Gestion des touches
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.key] = false;
+        });
+    }
+
+    startParticleGeneration() {
+        setInterval(() => {this.addParticle();}, 1000); //boucle infine avec setinterval donc appel au constructeur toute les 2 secondes
+    }
+
+    addParticle() {
+        const particle = {
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            radius: Math.random() * 10 + 5, 
+            color: this.getRandomColor(),
+            speedX: (Math.random() - 0.5) * 2,
+            speedY: (Math.random() - 0.5) * 2
+        };
+        this.particles.push(particle);
+    }
+
+    getRandomColor() {
+        const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    updateAbsorber() {
+        // Déplacement avec les touches flèches
+        if (this.keys['ArrowUp'] && this.absorber.y - this.absorber.radius > 0) {
+            this.absorber.y -= this.absorber.speed;
+        }
+        if (this.keys['ArrowDown'] && this.absorber.y + this.absorber.radius < this.canvas.height) {
+            this.absorber.y += this.absorber.speed;
+        }
+        if (this.keys['ArrowLeft'] && this.absorber.x - this.absorber.radius > 0) {
+            this.absorber.x -= this.absorber.speed;
+        }
+        if (this.keys['ArrowRight'] && this.absorber.x + this.absorber.radius < this.canvas.width) {
+            this.absorber.x += this.absorber.speed;
+        }
+    }
+
+    updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const particle = this.particles[i];
+            
+            // Mouvement des particules
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+            
+            // Rebond sur les bords
+            if (particle.x - particle.radius < 0 || particle.x + particle.radius > this.canvas.width) {
+                particle.speedX *= -1;
+            }
+            if (particle.y - particle.radius < 0 || particle.y + particle.radius > this.canvas.height) {
+                particle.speedY *= -1;
+            }
+            
+            // Collision avec l'absorbant
+            const dx = particle.x - this.absorber.x;
+            const dy = particle.y - this.absorber.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < particle.radius + this.absorber.radius) {
+                this.particles.splice(i, 1);
+                this.score++;
+                document.getElementById('score').textContent = this.score;
+            }
+        }
+    }
+
+    draw() {
+        // Effacer le canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Dessiner les particules
+        this.particles.forEach(particle => {
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = particle.color;
+            this.ctx.fill();
+            this.ctx.closePath();
+        });
+        
+        // Dessiner l'absorbant
+        this.ctx.beginPath();
+        this.ctx.arc(this.absorber.x, this.absorber.y, this.absorber.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = '#2c3e50';
+        this.ctx.fill();
+        this.ctx.closePath();
+        
+    }
+
+    gameLoop() {
+        this.updateAbsorber();
+        this.updateParticles();
+        this.draw();
+        requestAnimationFrame(() => this.gameLoop());
+    }
+}
+
+// Démarrer le jeu quand la page est chargée
+document.addEventListener('DOMContentLoaded', () => {
+    new ParticleGame();
+});
+</script>
+
+{% endblock %}
