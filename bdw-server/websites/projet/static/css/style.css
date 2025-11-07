@@ -8,12 +8,12 @@ main,
 footer {
     padding: 1em 0;
 }
-
+        
 header {
     background-color: cyan;
     text-align: center;
-    border-radius: 1em;
 }
+
 
 #div-central {
     display: flex;

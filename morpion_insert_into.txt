@@ -1,0 +1,21 @@
+set search_path to projet;
+
+INSERT INTO morpion (id_morpion, nom, image, points_de_vie, points_de_mana, points_de_reussite)
+VALUES 
+    (1,'diable','/static/img/images-morpion/t1.png',3,10,2),
+    (2,'cyclope','/static/img/images-morpion/t2.png',6,4,5),
+    (3,'kevin','/static/img/images-morpion/t3.png',10,2,3),
+    (4,'juliette','/static/img/images-morpion/t4.png',5,6,4),
+    (5,'soldat','/static/img/images-morpion/t5.png',10,0,5),
+    (6,'jack','/static/img/images-morpion/t6.png',4,2,9),
+    (7,'ninjette','/static/img/images-morpion/t7.png',5,5,5),
+    (8,'napoleon','/static/img/images-morpion/t8.png',5,0,10),
+    (9,'hache','/static/img/images-morpion/t9.png',6,3,6),
+    (10,'valentine','/static/img/images-morpion/t10.png',3,8,5),
+    (11,'cyborg','/static/img/images-morpion/t11.png',7,3,5),
+    (12,'paysan','/static/img/images-morpion/t12.png',4,4,7),
+    (13,'alien','/static/img/images-morpion/t13.png',4,7,4),
+    (14,'lapin','/static/img/images-morpion/t14.png',1,5,9),
+    (15,'vincent','/static/img/images-morpion/t15.png',9,5,1),
+    (16,'magicien','/static/img/images-morpion/t16.png',3,8,6);
+      
