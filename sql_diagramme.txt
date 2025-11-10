@@ -4,6 +4,7 @@ SET SEARCH_PATH TO PROJET;
 
 CREATE TABLE equipe(
    ID_Equipe INT,
+   nom VARCHAR(50) NOT NULL,
    couleur VARCHAR(7) NOT NULL,
    Date_Creation timestamp NOT NULL,
    PRIMARY KEY(ID_Equipe),

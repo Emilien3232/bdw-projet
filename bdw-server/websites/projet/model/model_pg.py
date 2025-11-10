@@ -190,6 +190,15 @@ def moyenne_journalisation(connexion):
     '''
     return execute_select_query(connexion, query)
 
+def ajoute_equipe(connexion, string_nom_equipe, liste_morpion_id, string_couleur):
+    """
+    Ajoute une équipe dans la table équipe avec les morpions sélectionnés
+    String string_nom_equipe : nom de l'équipe
+    List liste_morpion_id : liste des IDs des morpions sélectionnés
+    String string_couleur : couleur de l'équipe
+    Retourne le nombre de tuples insérés, ou None
+    """
+
 
 
 
