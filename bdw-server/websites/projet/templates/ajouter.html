@@ -2,7 +2,37 @@
 
 {% block main_content %}
 
+<h2>Ajouter une équipe</h2>
+<form method="post" action="/ajouter">
+    <label for="nom">Nom de l'équipe:</label><br>
+    <input type="text" id="nom" name="nom" required><br><br>
 
-{% include 'templates/message.html' %}
+    <fieldset>
+            <legend>Choisir entre 6 et 8 morpions:</legend>
+            
+            {% for morpion in REQUEST_VARS['morpions'] %}
+                <div>
+                    <input type="checkbox" 
+                        id="morpion_{{ morpion[0] }}" 
+                        name="morpions_selectionnes[]" 
+                        value="{{ morpion[0] }}"
+                        class="validation-morpion">
+                    <label for="morpion_{{ morpion[0] }}">{{ morpion[1] }} ; stat : {{morpion[3]}} PV ; {{morpion[4]}} PM ; {{morpion[5]}} PR</label>
+                </div>
+            {% endfor %}
+        </fieldset>
+
+    <label for="couleur_equipe">Couleur de l'équipe :</label><br>
+    <input type="color" id="couleur_equipe" name="couleur_equipe" value="#CCCCCC" required><br><br> <!-- methode plus general pour recuperer une couleur qui sera donc en hexadecimal-->
+
+    <input type="submit" value="Ajouter l'équipe">
+</form>
+
+{% if REQUEST_VARS['message_erreur'] %} <!--si on recoit un message d'erreur du controleur apres la gestion de la methiode post-->
+    <br><div style="color: red; background-color: #FFDDDD; padding: 10px; border: 1px solid red; border-radius: 5px;"><p>{{ REQUEST_VARS['message_erreur'] }}</p></div>
+{% endif %}
+{% if REQUEST_VARS['message_confirmation'] %} <!-- """" de confirmation """"-->
+    <br><div style="color: green; background-color: #DDFFDD; padding: 10px; border: 1px solid green; border-radius: 5px;"><p>{{ REQUEST_VARS['message_confirmation'] }}</p></div>
+{% endif %}
 
 {% endblock %}
