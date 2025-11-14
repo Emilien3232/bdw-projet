@@ -202,12 +202,23 @@ def ajoute_equipe(connexion, string_nom_equipe, liste_morpion_id, string_couleur
     id_equipe = count_instances(connexion, equipe) + 1 # récupère nombre d'équipe déja rentrées dans la bdw
     date = datetime.date.today()
 
-    query = '''
+    query1 = f"""
     INSERT INTO equipe  (id_equipe , couleur , date_creation , nom )
-    ( f'{id_equipe}', f'{string_couleur}', f'{date}', f'{string_nom_equipe}')
-    '''
+    values ({id_equipe}, {string_couleur}, {date} ,{string_nom_equipe} )
+    """
 
-    return execute_other_query(connexion, query, params=[])
+    liste_values = 'values'
+    
+    for i in range (len(liste_morpion_id)-1):
+        values = f'({1},{liste_morpion_id[i]})'
+        liste_values = liste_values + values + ',' 
+    liste_values = liste_values + f'({1},{liste_morpion_id[-1]})'
+
+    query2 = f""" INSERT INTO morpion (id_equipe, id_morpion) 
+    values {liste_values} """
+    
+
+    return execute_other_query(connexion, query1, params=[]),execute_other_query(connexion, query2, params=[])
 
 
 
