@@ -1,6 +1,7 @@
 import psycopg
 from psycopg import sql
 from logzero import logger
+from datetime import datetime
 
 def execute_select_query(connexion, query, params=[]):
     """
@@ -199,27 +200,28 @@ def ajoute_equipe(connexion, string_nom_equipe, liste_morpion_id, string_couleur
     String string_couleur : couleur de l'équipe
     Retourne le nombre de tuples insérés, ou None
     """
-    id_equipe = count_instances(connexion, equipe) + 1 # récupère nombre d'équipe déja rentrées dans la bdw
-    date = datetime.date.today()
+    id_equipe = count_instances(connexion, 'equipe')[0][0] + 1 # récupère nombre d'équipe déja rentrées dans la bdw
+    date = datetime.now().replace(microsecond=0)  # date actuelle sans les microsecondes
 
     query1 = f"""
     INSERT INTO equipe  (id_equipe , couleur , date_creation , nom )
-    values ({id_equipe}, {string_couleur}, {date} ,{string_nom_equipe} )
+    values ({id_equipe}, '{string_couleur}', '{date}' ,'{string_nom_equipe}' )
     """
 
     liste_values = 'values'
     
     for i in range (len(liste_morpion_id)-1):
-        values = f'({1},{liste_morpion_id[i]})'
+        values = f'({id_equipe},{liste_morpion_id[i]})'
         liste_values = liste_values + values + ',' 
-    liste_values = liste_values + f'({1},{liste_morpion_id[-1]})'
+    liste_values = liste_values + f'({id_equipe},{liste_morpion_id[-1]})'
 
-    query2 = f""" INSERT INTO morpion (id_equipe, id_morpion) 
-    values {liste_values} """
+    query2 = f""" INSERT INTO composer (id_equipe, id_morpion) 
+    {liste_values} """
     
 
-    return execute_other_query(connexion, query1, params=[]),execute_other_query(connexion, query2, params=[])
-
+    execute_other_query(connexion, query1, params=[])
+    execute_other_query(connexion, query2, params=[])
+    return None
 
 
 
