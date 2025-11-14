@@ -1,7 +1,8 @@
-"""
-ce fichier est vide, il faudra y mettre du code (question TP5)
-"""
+from model.model_pg import get_instances
 from controleurs.includes import add_activity
+
+REQUEST_VARS['equipes'] = get_instances(SESSION['connexion'], 'equipe')
+
 
 add_activity(SESSION['HISTORIQUE'], "consultation de la page afficher")
 
