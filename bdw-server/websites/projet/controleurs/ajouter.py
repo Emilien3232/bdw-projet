@@ -1,5 +1,5 @@
 from controleurs.includes import add_activity
-from model.model_pg import get_instances 
+from model.model_pg import get_instances, ajoute_equipe
 
 REQUEST_VARS['morpions'] = get_instances(SESSION['CONNEXION'],'morpion') # on recupere les instances de morpion disponibles pour le formulaire d'ajout d'équipe
 REQUEST_VARS['message_erreur'] = ""
@@ -18,7 +18,7 @@ if POST:
         if not (6 <= len(morpion_id) <= 8): #si l'utilisateur n'a pas selectionné entre 6 et 8 morpions on renvoie un message d'erreur
             REQUEST_VARS['message_erreur'] = "Veuillez sélectionner entre 6 et 8 morpions pour l'équipe."
         else: #si ce n'esst pas le cas on utilise la fonction ajout_equipe et on renvoie un message de confirmation
-            #ajoute_equipe(SESSION['CONNEXION'], nom_equipe, morpion_id, couleur)
+            ajoute_equipe(SESSION['CONNEXION'], nom_equipe, morpion_id, couleur)
             REQUEST_VARS['message_confirmation'] = "L'équipe a été ajoutée avec succès."
     except KeyError:
         REQUEST_VARS['message_erreur'] = "Veuillez séléctionner des morpions."

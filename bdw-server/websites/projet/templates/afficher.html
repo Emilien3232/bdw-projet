@@ -3,7 +3,17 @@
 {% block main_content %}
 <h2> Gestion des equipes </h2>
 <ul>
-	<li>{{REQUEST_VARS['equipe']}}</li>
+{% for equipe in REQUEST_VARS['equipes'] %}
+    <li>{{equipe[3]}}</li>
+{% endfor %}
+
+<form>
+    <label for="supp">Voulez-vous supprimez une équipe ?</label>
+    <input type="text" id="supp" name="supp" required>
+    <br>
+    <input type="submit" id ="equipe_supp" name="equipe_supp" value="supprimer l'équipe !">
+</form>
+
 </ul>
 
 {% endblock %}
