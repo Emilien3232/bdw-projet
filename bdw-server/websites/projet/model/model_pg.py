@@ -40,6 +40,14 @@ def get_instances(connexion, nom_table):
     query = sql.SQL('SELECT * FROM {table}').format(table=sql.Identifier(nom_table), )
     return execute_select_query(connexion, query)
 
+def get_listenom(connexion):
+    """
+    Retourne les noms de la table equipe
+    """
+
+    query = sql.SQL('SELECT nom FROM equipe ').format(table=sql.Identifier(equipe), )
+    return execute_select_query(connexion, query)
+
 def count_instances(connexion, nom_table):
     """
     Retourne le nombre d'instances de la table nom_table
