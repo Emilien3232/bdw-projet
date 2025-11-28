@@ -57,35 +57,6 @@ def count_instances(connexion, nom_table):
     return execute_select_query(connexion, query)
 
 
-"""
-ces fonctions ne seront plus utiles car elles sont relatives à un autre schema de BD
-
-def get_episodes_for_num(connexion, numero):
-
-    Retourne le titre des épisodes numérotés numero
-    Integer numero : numéro des épisodes
-
-    query = 'SELECT titre FROM episodes where numéro=%s'
-    return execute_select_query(connexion, query, [numero])
-
-def get_serie_by_name(connexion, nom_serie):
-
-    Retourne les informations sur la série nom_serie (utilisé pour vérifier qu'une série existe)
-    String nom_serie : nom de la série
-
-    query = 'SELECT * FROM series where nomsérie=%s'
-    return execute_select_query(connexion, query, [nom_serie])
-
-def insert_serie(connexion, nom_serie):
-
-    Insère une nouvelle série dans la BD
-    String nom_serie : nom de la série
-    Retourne le nombre de tuples insérés, ou None
-
-    query = 'INSERT INTO series VALUES(%s)'
-    return execute_other_query(connexion, query, [nom_serie])
-"""
-
 
 def get_table_like(connexion, nom_table, like_pattern):
     """
@@ -231,6 +202,23 @@ def ajoute_equipe(connexion, string_nom_equipe, liste_morpion_id, string_couleur
     execute_other_query(connexion, query2, params=[])
     return None
 
+def ajoute_config(connexion,nb_tours, dimension):
+    """ 
+    Ajoute une configuration d'une nouvelle partie avec une taille de grille ( dimension ) 
+    un nombre de tour max, en ajoutant aussi la date de création 
+    et un identifiant de config 
+    
+    """
+
+    id_config = count_instances(connexion, 'configuration')[0][0] + 1 # récupère nombre d'équipe déja rentrées dans la bdw et ajoute 1 pour avoir la nouvelle id_config
+    date = datetime.now().replace(microsecond=0)  # date actuelle sans les microsecondes
+
+    query = f"""
+    INSERT INTO configuration  (id_configuration , nb_tours_max , dimension , date_creation )
+    values ({id_config}, '{nb_tours}', '{dimension}' ,'{date}' )
+    """
+ 
+    execute_other_query(connexion, query, params=[])
 
 def supp_equipe(connexion,nom):
     """ 
