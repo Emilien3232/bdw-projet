@@ -232,24 +232,27 @@ def ajoute_equipe(connexion, string_nom_equipe, liste_morpion_id, string_couleur
     return None
 
 
-def supp_equipe(id_equipe):
+def supp_equipe(connexion,nom):
     """ 
-    une fonction qui prend en entrée l'id d'une équipe et qui efface les données de l'équipe 
+    une fonction qui prend en entrée le nom d'une équipe et qui efface les données de l'équipe 
     et les données de composer sur les morpions utilisés
     
     """
     query1 = f""" DELETE 
     from equipe 
-    where id_equipe = {id_equipe}
+    where nom = '{nom}'
     """
-	query2 = f""" DELETE 
+    query2 = f""" DELETE 
     from composer 
-    where id_equipe = {id_equipe}
+    where id_equipe = (SELECT id_equipe 
+                      from equipe 
+                      where nom = '{nom}' )
     """
-    execute_other_query(connexion, query1, params=[])
     execute_other_query(connexion, query2, params=[])
+    execute_other_query(connexion, query1, params=[])
+
     
-	return none
+    return None
 	
 
 

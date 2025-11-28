@@ -7,12 +7,21 @@
     <li>{{equipe[3]}}</li>
 {% endfor %}
 
-<form>
+<form method="post" action="/afficher">
     <label for="supp">Voulez-vous supprimez une équipe ?</label>
     <input type="text" id="supp" name="supp" required>
     <br>
     <input type="submit" id ="equipe_supp" name="equipe_supp" value="supprimer l'équipe !">
 </form>
+
+
+    
+{% if REQUEST_VARS['message_confirmation'] %} <!-- """" de confirmation """"-->
+    <br><div style="color: green; background-color: #DDFFDD; padding: 10px; border: 1px solid green; border-radius: 5px;"><p>{{ REQUEST_VARS['message_confirmation'] }}</p></div>
+{% endif %}
+{% if REQUEST_VARS['message_erreur'] %} <!--si on recoit un message d'erreur du controleur apres la gestion de la methiode post-->
+    <br><div style="color: red; background-color: #FFDDDD; padding: 10px; border: 1px solid red; border-radius: 5px;"><p>{{ REQUEST_VARS['message_erreur'] }}</p></div>
+{% endif %}
 
 </ul>
 
