@@ -14,9 +14,9 @@ controleur = "controleurs/afficher.py"
 template = "templates/afficher.html"
 
 [[routes]]
-url = "rechercher"
-controleur = "controleurs/rechercher.py"
-template = "templates/rechercher.html"
+url = "creation_partie"
+controleur = "controleurs/creation_partie.py"
+template = "templates/creation_partie.html"
 
 [[routes]]
 url = "historique"

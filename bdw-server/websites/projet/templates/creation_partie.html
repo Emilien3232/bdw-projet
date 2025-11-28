@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<form method="post" action = "/creation_partie">
+    <!-- balise select entre 3x3 et 4x4 required-->
+
+    
+    <label for = "nb_tours"> donner le nombre de tours max</label>
+    <input type = "text" name = "nb_tours" value = "nombre de tours" id = "nb_tours" required>
+    <fieldset>
+            <legend>Choisir 2 équipes:</legend>
+            
+            {% for equipe REQUEST_VARS['liste_equipes'] %}
+                <div>
+                    <input type="checkbox" 
+                        id="equipe_{{ liste_equipes[0] }}" 
+                        name="equipe_selectionnes[]" 
+                        value="{{ liste_equipes[0] }}"
+                        class="validation-equipe">
+                    <label for="equipe_{{ liste_equipes[0] }}">{{ liste_equipes[1] }} </label>
+                </div>
+            {% endfor %}
+        </fieldset>
+
+</form>
+{% endblock %}
