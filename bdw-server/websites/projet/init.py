@@ -10,3 +10,5 @@ SESSION['BASELINE'] = "un jeu super"
 SESSION['DIR_HISTORIQUE'] = path.join(SESSION['DIRECTORY'], "historiques")
 SESSION['HISTORIQUE'] = dict()
 SESSION['CURRENT_YEAR'] = datetime.now().year
+SESSION['EQUIPE_1'] = None
+SESSION['EQUIPE_2'] = None

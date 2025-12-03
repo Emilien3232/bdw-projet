@@ -3,25 +3,51 @@
 {% block main_content %}
 
 <form method="post" action = "/creation_partie">
-    <!-- balise select entre 3x3 et 4x4 required-->
+    <fieldset>
+        <legend>Choisissez la taille de la grille :</legend>
 
-    
+        <label>
+            <input type="radio" name="taille_grille" value="3" id="grille3x3" required>
+            3x3
+        </label>
+
+        <label>
+            <input type="radio" name="taille_grille" value="4" id="grille4x4">
+            4x4
+        </label>
+        
+    </fieldset>
     <label for = "nb_tours"> donner le nombre de tours max</label>
-    <input type = "text" name = "nb_tours" value = "nombre de tours" id = "nb_tours" required>
+    <input 
+    type="number" 
+    id="nb_tours" 
+    name="nb_tours" 
+    min="1" 
+    step="1" 
+    required
+>
     <fieldset>
             <legend>Choisir 2 équipes:</legend>
-            
-            {% for equipe REQUEST_VARS['liste_equipes'] %}
+           
+            {% for equipe in REQUEST_VARS['liste_equipes'] %}
                 <div>
                     <input type="checkbox" 
-                        id="equipe_{{ liste_equipes[0] }}" 
+                        id="equipe_{{ equipe[0] }}" 
                         name="equipe_selectionnes[]" 
-                        value="{{ liste_equipes[0] }}"
+                        value="{{ equipe[0] }}"
                         class="validation-equipe">
-                    <label for="equipe_{{ liste_equipes[0] }}">{{ liste_equipes[1] }} </label>
+                    <label for="equipe_{{ equipe[0] }}">{{ equipe[3] }} </label>
                 </div>
             {% endfor %}
+
         </fieldset>
+    <input type="submit" value="Créer la partie">
 
 </form>
+{% if REQUEST_VARS['message_erreur'] %} <!--si on recoit un message d'erreur du controleur apres la gestion de la methiode post-->
+    <br><div style="color: red; background-color: #FFDDDD; padding: 10px; border: 1px solid red; border-radius: 5px;"><p>{{ REQUEST_VARS['message_erreur'] }}</p></div>
+{% endif %}
+{% if REQUEST_VARS['message_confirmation'] %} <!-- """" de confirmation """"-->
+    <br><div style="color: green; background-color: #DDFFDD; padding: 10px; border: 1px solid green; border-radius: 5px;"><p>{{ REQUEST_VARS['message_confirmation'] }}</p></div>
+{% endif %}
 {% endblock %}
