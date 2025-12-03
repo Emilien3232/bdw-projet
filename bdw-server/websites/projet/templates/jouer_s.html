@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+{% if SESSION['CONFIG_PARTIE'] %}
+    {%if REQUEST_VARS['lancement_partie']%}
+        <div class="jeu-interface">
+
+            <h2>{{SESSION['EQUIPE_1'][3]}}</h2>
+            <div class="grille-morpion-container">
+            {%for i in range(REQUEST_VARS['nb_morpion_equipe_1'])%}
+                <div class="morpion-container">
+                    <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_1'][i][2] }}" draggable="true" alt="{{REQUEST_VARS['morpion_equipe_1'][i][1]}}" class="image-morpion">
+                </div>
+            {%endfor%}
+            </div>
+
+            <div class="grille-container">
+            {%for i in range(SESSION['CONFIG_PARTIE'][2])%}
+                <div class="row">
+                {%for j in range(SESSION['CONFIG_PARTIE'][2])%}
+                    <div class="cellule" id="{{i}}-{{j}}">
+                    </div>
+                {%endfor%}
+                </div>
+            {%endfor%}
+            </div>
+
+
+            <div class="grille-morpion-container">
+            {%for i in range(REQUEST_VARS['nb_morpion_equipe_2'])%}
+                <div class="morpion-container">
+                    <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_2'][i][2] }}" draggable="true" alt="{{REQUEST_VARS['morpion_equipe_2'][i][1]}}" class="image-morpion">
+                </div>
+            {%endfor%}
+            </div>
+            <h2>{{SESSION['EQUIPE_2'][3]}}</h2>
+        </div>
+    {%else%}
+        <form method="post" action="jouer_s">
+            <fieldset>
+                <legend> Qui commence ?</legend>
+                <input type="radio" id="equipe1" name="equipe_commence" value="1" required>
+                <label for="equipe1">{{SESSION['EQUIPE_1'][3]}}</label><br>
+                <input type="radio" id="equipe2" name="equipe_commence" value="2" >
+                <label for="equipe2">{{SESSION['EQUIPE_2'][3]}}</label><br><br>
+                <input type="radio" id="aleatoire" name="equipe_commence" value="0">
+                <label for="aleatoire">Aléatoire</label><br><br>
+                <input type="submit" name="lancement_partie" value="Lancer la partie">
+            </fieldset>
+    {% endif %}
+{%else%}
+    <p> Aucune partie n'est configurée. Veuillez créer une partie dans le menu "créer une partie". </p>
+{% endif %}
+{% endblock %}

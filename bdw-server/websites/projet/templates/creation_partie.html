@@ -7,7 +7,7 @@
         <legend>Choisissez la taille de la grille :</legend>
 
         <label>
-            <input type="radio" name="taille_grille" value="3" id="grille3x3" required>
+            <input type="radio" name="taille_grille" value= "3" id="grille3x3" required>
             3x3
         </label>
 
@@ -17,15 +17,10 @@
         </label>
         
     </fieldset>
+
     <label for = "nb_tours"> donner le nombre de tours max</label>
-    <input 
-    type="number" 
-    id="nb_tours" 
-    name="nb_tours" 
-    min="1" 
-    step="1" 
-    required
->
+    <input type="number" id="nb_tours" name="nb_tours" min="1" step="1" required>
+
     <fieldset>
             <legend>Choisir 2 équipes:</legend>
            
@@ -34,7 +29,7 @@
                     <input type="checkbox" 
                         id="equipe_{{ equipe[0] }}" 
                         name="equipe_selectionnes[]" 
-                        value="{{ equipe[0] }}"
+                        value= "{{ equipe[0] }}"
                         class="validation-equipe">
                     <label for="equipe_{{ equipe[0] }}">{{ equipe[3] }} </label>
                 </div>

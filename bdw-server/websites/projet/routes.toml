@@ -29,6 +29,7 @@ controleur = "controleurs/ajouter.py"
 template = "templates/ajouter.html"
 
 [[routes]]
-url = "test"
-controleur = "controleurs/test.py"
-template = "templates/test.html"
+url = "jouer_s"
+controleur = "controleurs/jouer_s.py"
+template = "templates/jouer_s.html"
+

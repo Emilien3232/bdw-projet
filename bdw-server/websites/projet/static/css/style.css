@@ -1,7 +1,10 @@
 body {
     background-color: #FFFFFF;
 }
-
+html, body {
+    height: 100%; /* S'assure que ces éléments prennent toute la hauteur disponible */
+    margin: 0;
+}
 header,
 nav,
 main,
@@ -14,7 +17,7 @@ header {
     text-align: center;
 }
 
-
+/**
 #div-central {
     display: flex;
 	justify-content: space-between;
@@ -23,7 +26,27 @@ header {
 	box-sizing: border-box;
 	height: 100%;
 }
+**/
 
+#div-central {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    margin: auto;
+    box-sizing: border-box;
+    height: calc(100% - 5em); /* 100% - (hauteur estimée de header + footer) */
+}
+
+main {
+    flex : 10;
+    background-color: #FFFFFF;
+    padding-left: 3em;
+    
+    /* PROPRIÉTÉS DE CENTRAGE AJOUTÉES/MODIFIÉES */
+    display: flex;
+    justify-content: center; /* Centre horizontalement (selon l'axe principal) */
+    align-items: center;    /* Centre verticalement (selon l'axe secondaire) */
+}
 nav {
 	flex : 2;
     background-color: #b59ff7;
@@ -120,3 +143,82 @@ footer {
     font-weight: bold;
     color: #2c3e50;
 }
+
+
+/* Styles pour la grille de jeu */
+.grille-container {
+    display: flex; /* Utiliser flexbox pour aligner les lignes au centre si nécessaire */
+    flex-direction: column;
+    margin: 20px ;
+    width: fit-content; /* Permet au conteneur de s'adapter à la largeur totale des lignes */
+}
+
+.row {
+    display: flex; 
+    /* Les cellules ne doivent pas s'enrouler sur plusieurs lignes */
+    flex-wrap: nowrap; 
+    /* Enlève la marge par défaut pour un placement précis */
+    margin: 0;
+    padding: 0;
+}
+
+.cellule {
+    /* Définit une taille carrée pour chaque cellule */
+    width: 160px; 
+    height: 120px; 
+    
+    /* Styles visuels de la grille */
+    border: 1px solid #333; /* Bordure pour rendre la grille visible */
+    background-color: #f0f0f0; /* Couleur de fond par défaut */
+    
+    /* Relatif au xcontenu  */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    user-select: none;
+    
+    /* transitions */
+    transition: background-color 0.2s ease;
+}
+
+/* Style quand la souris passe sr la cellule */
+.cellule:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+/*Style pour les commandes à drte de la grille*/
+.jeu-interface {
+    display: flex; 
+    gap: 20px;     /* Ajoute un espace entre la grille et la flèche */
+    align-items: center; 
+    justify-content: center; /* Centrer l'ensemble du jeu sur la page */
+}
+
+.grille-morpion-continer {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    border: 2px solid #333; 
+    background-color: #f0f0f0;
+    padding: 10px; 
+}
+.morpion-container {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    border: 2px solid #333; 
+    background-color: #f0f0f0;
+    padding: 10px; 
+}
+
+.image-morpion {
+    width: 75px; 
+    height: 75; 
+    margin: 5px; 
+    border: 1px solid #333; 
+    background-color: #f0f0f0;
+}   

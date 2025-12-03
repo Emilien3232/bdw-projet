@@ -1,14 +1,28 @@
 <!-- menu -->
 <nav>
 	<a href="/">Accueil</a>
-	</br>
-	<a href="afficher">Gestion Equipes</a>
-	</br>
+	</br>	
+
 	<a href="ajouter">Ajouter équipe</a>
 	</br>
+
+	<a href="afficher">Gestion Equipes</a>
+	</br>
+
 	<a href="creation_partie">créer une partie</a>
 	</br>
+	
+	<a href="jouer_s">JOUER (simple)</a>
+	</br>
+
 	<a href="historique">Historique</a>
 	</br>
-	<a href="test">Test</a>
+
+
+	</br>
+	{% if SESSION['CONFIG_PARTIE'] %}
+	<p>CONFIGURATION ACTUEL :{{SESSION['CONFIG_PARTIE'][1]}} tours , {{SESSION['CONFIG_PARTIE'][2]}}x{{SESSION['CONFIG_PARTIE'][2]}}</p>
+	</br>
+	<p>{{SESSION['EQUIPE_1'][3]}} VS {{SESSION['EQUIPE_2'][3]}}</p>
+	{% endif %}
 </nav>

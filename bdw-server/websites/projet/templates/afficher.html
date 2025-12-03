@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-<h2> Gestion des equipes </h2>
 <ul>
 {% for equipe in REQUEST_VARS['equipes'] %}
     <li>{{equipe[3]}}</li>

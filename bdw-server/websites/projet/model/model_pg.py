@@ -220,6 +220,19 @@ def ajoute_config(connexion,nb_tours, dimension):
  
     execute_other_query(connexion, query, params=[])
 
+    return None
+
+def supp_config(connexion):
+    """ 
+    une fonction qui supprime les configurations existantes dans la bdw
+    """
+    query = f""" DELETE 
+    from configuration 
+    """
+    execute_other_query(connexion, query, params=[])
+
+    return None
+
 def supp_equipe(connexion,nom):
     """ 
     une fonction qui prend en entrée le nom d'une équipe et qui efface les données de l'équipe 
@@ -243,6 +256,15 @@ def supp_equipe(connexion,nom):
     return None
 	
 
+def get_morpion_par_equipe(connexion, id_equipe):
+    """
+    Retourne les morpions associés à une équipe donnée
+    Integer id_equipe : identifiant de l'équipe
+    """
+    query = f"""
+    select m.* from morpion m where m.id_morpion in (select c.id_morpion from composer c where c.id_equipe = {id_equipe} )
+    """
 
+    return execute_select_query(connexion, query, params=[])
 
 

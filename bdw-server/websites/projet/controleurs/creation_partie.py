@@ -1,23 +1,25 @@
 from controleurs.includes import add_activity
-from model.model_pg import get_instances , ajoute_config
+from model.model_pg import get_instances , ajoute_config , supp_config
 
 REQUEST_VARS['liste_equipes'] = get_instances(SESSION['CONNEXION'], 'equipe')
+equipes_par_id = {str(equipe[0]): equipe for equipe in REQUEST_VARS['liste_equipes']} #obliger vu que retour du form sont des strings
 print(REQUEST_VARS['liste_equipes'])
 if POST :
     nb_tours = POST['nb_tours'][0]
-    equipes_selectionnees = POST['equipe_selectionnes[]']
-    if POST['taille_grille'] == '3' : 
-        dim_grille = 3
-    else : 
-        dim_grille = 4
-    if len(equipes_selectionnees) != 2 :
+    equipes_id_selectionnees = POST['equipe_selectionnes[]']
+    dim_grille = POST['taille_grille'][0]
+    if len(equipes_id_selectionnees) != 2 :
         REQUEST_VARS['message_erreur'] = "Veuillez sélectionner exactement deux équipes."
     else :
-        ajoute_config(SESSION['CONNEXION'],nb_tours, dim_grille)
-        SESSION['EQUIPE_1'] = equipes_selectionnees[0]
-        SESSION['EQUIPE_2'] = equipes_selectionnees[1]
-        REQUEST_VARS['message_confirmation'] = "La partie a été créée avec succès et les équipes sont prêtes pour la partie ! allez dans JOUER."
+        equipe_1_complete = equipes_par_id[equipes_id_selectionnees[0]]
+        equipe_2_complete = equipes_par_id[equipes_id_selectionnees[1]]
+        supp_config(SESSION['CONNEXION']) # on supprime les ancienne config si elle existent
+        ajoute_config(SESSION['CONNEXION'],nb_tours, dim_grille) # on ajoute la nouvelle config
+        SESSION['CONFIG_PARTIE'] = get_instances(SESSION['CONNEXION'],'configuration')[0] #on met à jour la config en session
+        SESSION['EQUIPE_1'] = equipe_1_complete
+        SESSION['EQUIPE_2'] = equipe_2_complete
+        REQUEST_VARS['message_confirmation'] = f"""La partie a été créée avec succès et les équipes : {SESSION['EQUIPE_1'][3]} ET {SESSION['EQUIPE_2'][3]} sont prêtes pour la partie ! allez dans JOUER."""
 
-add_activity(SESSION['HISTORIQUE'], "consultation de la page recherche")
+add_activity(SESSION['HISTORIQUE'], "consultation de la page de création de partie")
 
 
