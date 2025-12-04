@@ -2,52 +2,70 @@
 
 {% block main_content %}
 {% if SESSION['CONFIG_PARTIE'] %}
-    {%if REQUEST_VARS['lancement_partie']%}
-        <div class="jeu-interface">
-
+    <div class = "jeu-interface">
+    <form method="post" action="jouer_s">
+        <div class = "espace_equipe1">
             <h2>{{SESSION['EQUIPE_1'][3]}}</h2>
             <div class="grille-morpion-container">
-            {%for i in range(REQUEST_VARS['nb_morpion_equipe_1'])%}
+            {%for i in range(0,REQUEST_VARS['nb_morpion_equipe_1'])%}
                 <div class="morpion-container">
-                    <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_1'][i][2] }}" draggable="true" alt="{{REQUEST_VARS['morpion_equipe_1'][i][1]}}" class="image-morpion">
+                {%if REQUEST_VARS['equipe1_active']%}
+                    <input type="checkbox" id="morpion_{{ REQUEST_VARS['morpion_equipe_1'][i][0] }}" value="{{ REQUEST_VARS['morpion_equipe_1'][i] }}" name="morpion_selectionne[]">
+                {% endif %}
+                    <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_1'][i][2] }}" alt="{{REQUEST_VARS['morpion_equipe_1'][i][1]}}" class="image-morpion">
                 </div>
             {%endfor%}
             </div>
+        </div>
 
+        <div class = "espace_grille">
+            <div>
+                <input type="submit" value="Valider le déplacement" name ="valider_deplacement">
+                {% if REQUEST_VARS['message_erreur'] %} <!--si on recoit un message d'erreur du controleur apres la gestion de la methiode post-->
+                    <br><div style="color: red; background-color: #FFDDDD; padding: 10px; border: 1px solid red; border-radius: 5px;"><p>{{ REQUEST_VARS['message_erreur'] }}</p></div>
+                {% endif %}
+            </div>
             <div class="grille-container">
             {%for i in range(SESSION['CONFIG_PARTIE'][2])%}
-                <div class="row">
+                 <div class="row">
                 {%for j in range(SESSION['CONFIG_PARTIE'][2])%}
-                    <div class="cellule" id="{{i}}-{{j}}">
+                    <div class="cellule" id="{{i}},{{j}}">
+                        <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
                     </div>
                 {%endfor%}
                 </div>
             {%endfor%}
             </div>
+            <div>
+                <h3>Tour restant : {{SESSION['CONFIG_PARTIE'][1]}}</h3>
+                <h3>Équipe en action : 
+                    {%if REQUEST_VARS['equipe1_active']%}
+                        {{SESSION['EQUIPE_1'][3]}}
+                    {%else%}
+                        {{SESSION['EQUIPE_2'][3]}}
+                    {%endif%}
+                </h3>
+            </div>
+        </div>
 
-
+        <div class = "espace_equipe2">
             <div class="grille-morpion-container">
-            {%for i in range(REQUEST_VARS['nb_morpion_equipe_2'])%}
+            {%for i in range(0,REQUEST_VARS['nb_morpion_equipe_2'])%}
                 <div class="morpion-container">
-                    <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_2'][i][2] }}" draggable="true" alt="{{REQUEST_VARS['morpion_equipe_2'][i][1]}}" class="image-morpion">
+                {%if REQUEST_VARS['equipe1_active']%}
+                {%else%}
+                    <input type="checkbox" id="morpion_{{ REQUEST_VARS['morpion_equipe_2'][i][0] }}" value="{{ REQUEST_VARS['morpion_equipe_2'][i][2] }}" name="morpion_selectionne[]" >
+                {% endif %}                   
+                    <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_2'][i][2] }}" alt="{{REQUEST_VARS['morpion_equipe_2'][i][1]}}" class="image-morpion">
                 </div>
             {%endfor%}
             </div>
             <h2>{{SESSION['EQUIPE_2'][3]}}</h2>
         </div>
-    {%else%}
-        <form method="post" action="jouer_s">
-            <fieldset>
-                <legend> Qui commence ?</legend>
-                <input type="radio" id="equipe1" name="equipe_commence" value="1" required>
-                <label for="equipe1">{{SESSION['EQUIPE_1'][3]}}</label><br>
-                <input type="radio" id="equipe2" name="equipe_commence" value="2" >
-                <label for="equipe2">{{SESSION['EQUIPE_2'][3]}}</label><br><br>
-                <input type="radio" id="aleatoire" name="equipe_commence" value="0">
-                <label for="aleatoire">Aléatoire</label><br><br>
-                <input type="submit" name="lancement_partie" value="Lancer la partie">
-            </fieldset>
-    {% endif %}
+    </form>
+    </div>
+
+
 {%else%}
     <p> Aucune partie n'est configurée. Veuillez créer une partie dans le menu "créer une partie". </p>
 {% endif %}
