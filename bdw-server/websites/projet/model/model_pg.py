@@ -267,4 +267,15 @@ def get_morpion_par_equipe(connexion, id_equipe):
 
     return execute_select_query(connexion, query, params=[])
 
+def get_morpion_par_id(connexion, id_morpion):
+    """
+    Retourne le morpion associé à un id_morpion donné
+    Integer id_morpion : identifiant du morpion
+    """
+    query = f"""
+    select m.* from morpion m where m.id_morpion = {id_morpion}
+    """
+
+    return execute_select_query(connexion, query, params=[])
+
 

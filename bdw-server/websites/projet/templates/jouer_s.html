@@ -10,7 +10,7 @@
             {%for i in range(0,REQUEST_VARS['nb_morpion_equipe_1'])%}
                 <div class="morpion-container">
                 {%if REQUEST_VARS['equipe1_active']%}
-                    <input type="checkbox" id="morpion_{{ REQUEST_VARS['morpion_equipe_1'][i][0] }}" value="{{ REQUEST_VARS['morpion_equipe_1'][i] }}" name="morpion_selectionne[]">
+                    <input type="checkbox" id="morpion_{{ REQUEST_VARS['morpion_equipe_1'][i][0] }}" value="{{ REQUEST_VARS['morpion_equipe_1'][i][0] }}" name="morpion_selectionne[]">
                 {% endif %}
                     <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_1'][i][2] }}" alt="{{REQUEST_VARS['morpion_equipe_1'][i][1]}}" class="image-morpion">
                 </div>
@@ -27,11 +27,17 @@
             </div>
             <div class="grille-container">
             {%for i in range(SESSION['CONFIG_PARTIE'][2])%}
-                 <div class="row">
+                <div class="row">
                 {%for j in range(SESSION['CONFIG_PARTIE'][2])%}
-                    <div class="cellule" id="{{i}},{{j}}">
-                        <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
-                    </div>
+                    {% if REQUEST_VARS['TAB'][i][j][0] %} <!--si la case de la grille contient un morpion, on affiche l'image de ce morpion-->
+                        <div class = "cellule" id="{{i}},{{j}}"                                                                                                                                                                     >
+                            <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['TAB'][i][j][1][2] }}" alt="Morpion" class="image-morpion">
+                        </div>
+                    {%else%} <!-- sinon on affiche le bouton de selection-->                                                                                                                                                                
+                        <div class="cellule" id="{{i}},{{j}}">
+                            <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
+                        </div>
+                    {% endif %}
                 {%endfor%}
                 </div>
             {%endfor%}
@@ -54,7 +60,7 @@
                 <div class="morpion-container">
                 {%if REQUEST_VARS['equipe1_active']%}
                 {%else%}
-                    <input type="checkbox" id="morpion_{{ REQUEST_VARS['morpion_equipe_2'][i][0] }}" value="{{ REQUEST_VARS['morpion_equipe_2'][i][2] }}" name="morpion_selectionne[]" >
+                    <input type="checkbox" id="morpion_{{ REQUEST_VARS['morpion_equipe_2'][i][0] }}" value="{{ REQUEST_VARS['morpion_equipe_2'][i][0] }}" name="morpion_selectionne[]" >
                 {% endif %}                   
                     <img src="{{ SESSION['DIRECTORY'] }}{{ REQUEST_VARS['morpion_equipe_2'][i][2] }}" alt="{{REQUEST_VARS['morpion_equipe_2'][i][1]}}" class="image-morpion">
                 </div>
