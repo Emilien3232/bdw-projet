@@ -144,6 +144,15 @@ footer {
     color: #2c3e50;
 }
 
+.accueil-interface {
+    display: flex;           /* Active le mode Flexbox (alignement horizontal par défaut) */
+    flex-direction: column;     /* Force l'alignement en ligne (gauche -> droite) */
+    width: 100%;             /* Prend toute la largeur */
+    min-height: 80vh;        /* Prend au moins 80% de la hauteur de l'écran */
+    gap: 20px;               /* Ajoute un espace de 20px entre les colonnes */
+    padding: 20px;           /* Ajoute un peu d'espace interne autour du tout */
+}
+
 
 /* Styles pour la grille de jeu */
 .grille-container {

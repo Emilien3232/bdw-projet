@@ -6,6 +6,13 @@
     <form method="post" action="jouer_s">
         <div class = "espace_equipe1">
             <h2>{{SESSION['EQUIPE_1'][3]}}</h2>
+            {%if REQUEST_VARS['equipe1_active']%}
+                <label for = "sorts_equipe1">Sorts disponibles :</label>
+                <select id="sorts_equipe1" name="sorts_equipe1">
+                    <option value="1">Sort de feu</option>
+                    <option value="2">Sort de soin</option>
+                    <option value="3">Armageddon</option>   
+            {%endif%}       
             <div class="grille-morpion-container">
             {%for i in range(0,REQUEST_VARS['nb_morpion_equipe_1'])%}
                 <div class="morpion-container">
@@ -27,25 +34,23 @@
             </div>
             <div class="grille-container">
             {%for i in range(SESSION['CONFIG_PARTIE'][2])%}
-                {% set ligne = SESSION['TAB'][i] %} 
-                {% if ligne is iterable and ligne|length >= SESSION['CONFIG_PARTIE'][2] %}
                 <div class="row">
                 {%for j in range(SESSION['CONFIG_PARTIE'][2])%}
-                        {% set case = ligne[j] %}
-                            {% if case is iterable and case|length > 0 and case[0] %} <!--si la case de la grille contient un morpion, on affiche l'image de ce morpion-->
-                                <div style ="width: 160px;height: 120px;border: 1px solid #333;background-color: #f0f0f0;display: flex;justify-content: center;align-items: center;user-select: none;transition: background-color 0.2s ease;"id="{{i}},{{j}}"                                                                                                                                                                     >
-                                    <img src="{{ SESSION['DIRECTORY'] }}{{ SESSION['TAB'][i][j][1][2] }}" alt="Morpion" class="image-morpion">
-                                </div>
-                            {%else%} <!-- sinon on affiche le bouton de selection-->                                                                                                                                                                
-                                <div class="cellule" id="{{i}},{{j}}">
-                                    <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
-                                </div>
+                    {% if SESSION['TAB'][i][j][0] %} <!--si la case de la grille contient un morpion, on affiche l'image de ce morpion-->
+                        <div class = "cellule" id="{{i}},{{j}}"                                                                                                                                                                     >
+                            <img src="{{ SESSION['DIRECTORY'] }}{{ SESSION['TAB'][i][j][1][2] }}" alt="Morpion" class="image-morpion">
+                        </div>
+                    {%elif (i,j) in cases_inutilisables %} <!--si la case est inutilisable (ex : armageddon) on affiche une case grisée-->
+                        <div class="cellule case-inutilisable" id="{{i}},{{j}}">
+                            X
+                        </div>
+                    {%else%} <!-- sinon on affiche le bouton de selection-->                                                                                                                                                                
+                        <div class="cellule" id="{{i}},{{j}}">
+                            <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
+                        </div>
                     {% endif %}
                 {%endfor%}
                 </div>
-                {% else %}
-                    <p>Erreur : La grille de jeu n'est pas correctement initialisée.</p>
-                {% endif %}
             {%endfor%}
             </div>
             <div>
@@ -72,6 +77,13 @@
                 </div>
             {%endfor%}
             </div>
+            {%if REQUEST_VARS['equipe1_active']%}
+                <label for = "sorts_equipe1">Sorts disponibles :</label>
+                <select id="sorts_equipe1" name="sorts_equipe1">
+                    <option value="1">Sort de feu</option>
+                    <option value="2">Sort de soin</option>
+                    <option value="3">Armageddon</option>   
+            {%endif%}    
             <h2>{{SESSION['EQUIPE_2'][3]}}</h2>
         </div>
     </form>
