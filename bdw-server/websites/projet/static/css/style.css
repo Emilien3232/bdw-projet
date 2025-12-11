@@ -2,7 +2,7 @@ body {
     background-color: #d6e8f1;
 }
 html, body {
-    height: 100%; /* S'assure que ces éléments prennent toute la hauteur disponible */
+    height: 100%; 
     margin: 0;
 }
 header,
@@ -15,18 +15,9 @@ footer {
 header {
     background-color: #1f5797;
     text-align: center;
+
 }
 
-/**
-#div-central {
-    display: flex;
-	justify-content: space-between;
-	align-items: stretch;
-    margin: auto;
-	box-sizing: border-box;
-	height: 100%;
-}
-**/
 
 #div-central {
     display: flex;
@@ -42,11 +33,11 @@ main {
     background-color: #d6e8f1;
     padding-left: 3em;
     
-    /* PROPRIÉTÉS DE CENTRAGE AJOUTÉES/MODIFIÉES */
     display: flex;
-    justify-content: center; /* Centre horizontalement (selon l'axe principal) */
-    align-items: center;    /* Centre verticalement (selon l'axe secondaire) */
+    justify-content: center; 
+    align-items: center;    
 }
+
 nav {
 	flex : 2;
     background-color: #1f5797;
@@ -54,6 +45,7 @@ nav {
     padding-right: 0.em;
 	margin-left: 0em;
     line-height: 2em;
+    text-align: center;
 }
 
 nav > ul {
@@ -145,28 +137,26 @@ footer {
 }
 
 .accueil-interface {
-    display: flex;           /* Active le mode Flexbox (alignement horizontal par défaut) */
-    flex-direction: column;     /* Force l'alignement en ligne (gauche -> droite) */
-    width: 100%;             /* Prend toute la largeur */
-    min-height: 80vh;        /* Prend au moins 80% de la hauteur de l'écran */
-    gap: 20px;               /* Ajoute un espace de 20px entre les colonnes */
-    padding: 20px;           /* Ajoute un peu d'espace interne autour du tout */
+    display: flex;           
+    flex-direction: column;     
+    width: 100%;             
+    min-height: 80vh;        
+    gap: 20px;              
+    padding: 20px;          
 }
 
 
 /* Styles pour la grille de jeu */
 .grille-container {
-    display: flex; /* Utiliser flexbox pour aligner les lignes au centre si nécessaire */
+    display: flex; 
     flex-direction: column;
     margin: 20px ;
-    width: fit-content; /* Permet au conteneur de s'adapter à la largeur totale des lignes */
+    width: fit-content; 
 }
 
 .row {
     display: flex; 
-    /* Les cellules ne doivent pas s'enrouler sur plusieurs lignes */
     flex-wrap: nowrap; 
-    /* Enlève la marge par défaut pour un placement précis */
     margin: 0;
     padding: 0;
 }
@@ -195,26 +185,25 @@ footer {
     cursor: pointer;
 }
 /*fin styles grille de jeu*/
+
 /* Conteneur principal de l'interface de jeu */
 
 .jeu-interface {
-    display: flex;           /* Active le mode Flexbox (alignement horizontal par défaut) */
-    flex-direction: column;     /* Force l'alignement en ligne (gauche -> droite) */
-    width: 100%;             /* Prend toute la largeur */
-    min-height: 80vh;        /* Prend au moins 80% de la hauteur de l'écran */
-    gap: 20px;               /* Ajoute un espace de 20px entre les colonnes */
-    padding: 20px;           /* Ajoute un peu d'espace interne autour du tout */
+    display: flex;           
+    flex-direction: column;   
+    width: 100%;            
+    min-height: 80vh;      
+    gap: 20px;               
+    padding: 20px;        
 }
 
-/* Configuration commune pour les deux équipes (gauche et droite) */
 .espace_equipe1 {
-    flex: 1;                 /* Prend 1 part de l'espace disponible */
-    display: flex;           /* Active Flexbox à l'intérieur de la colonne aussi */
-    flex-direction: column;  /* Aligne les éléments (boutons, infos) verticalement */
-    align-items: center;     /* Centre les éléments horizontalement */
-    justify-content: flex-start; /* Aligne le contenu vers le haut (ou 'center' pour centrer) */
+    flex: 1;                 
+    display: flex;           
+    flex-direction: column;  
+    align-items: center;    
+    justify-content: flex-start; 
     
-    /* Juste pour le style visuel (facultatif) */
     background-color: #f4f4f4;
     padding: 15px;
     border-radius: 8px;
@@ -222,13 +211,12 @@ footer {
 }
 
 .espace_equipe2 {
-    flex: 1;                 /* Prend 1 part de l'espace disponible */
-    display: flex;           /* Active Flexbox à l'intérieur de la colonne aussi */
-    flex-direction: column;  /* Aligne les éléments (boutons, infos) verticalement */
-    align-items: center;     /* Centre les éléments horizontalement */
-    justify-content: flex-start; /* Aligne le contenu vers le haut (ou 'center' pour centrer) */
+    flex: 1;                 
+    display: flex;          
+    flex-direction: column;  
+    align-items: center; 
+    justify-content: flex-start; 
     
-    /* Juste pour le style visuel (facultatif) */
     background-color: #f4f4f4;
     padding: 15px;
     border-radius: 8px;
@@ -237,11 +225,11 @@ footer {
 
 /* Configuration spécifique pour la grille centrale */
 .espace_grille {
-    flex: 2;                 /* Prend 2 parts d'espace (donc 2x plus large que les côtés) */
+    flex: 2;                
     display: flex;
-    flex-direction: row;  /* Aligne Tour / Grille / Joueur verticalement */
-    align-items: center;     /* Centre tout horizontalement */
-    justify-content: center; /* Centre tout verticalement */
+    flex-direction: row;  
+    align-items: center;     
+    justify-content: center; 
     
     background-color: #fff;
     border: 2px solid #333;
@@ -249,47 +237,37 @@ footer {
     padding: 20px;
 }
 /*fin styles interface de jeu */
+
 /*styles pour l'affichges des morpions dans les espaces équipes*/
-/* 1. Conteneur des Morpions (Présent dans espace_equipe1 et espace_equipe2) */
 .grille-morpion-container {
-    /* Utilisation de Flexbox pour aligner les morpions */
     display: flex; 
-    /* Définit une largeur maximale pour que les morpions s'étalent bien */
     width: 100%; 
-    /* Centre les lignes de morpions si la largeur n'est pas remplie */
     flex-direction: row;
     justify-content: center; 
     padding: 10px 0;
     margin-top: 10px;
-    border-top: 1px solid #ddd; /* Séparation visuelle avec le reste des éléments (futurs boutons/infos) */
+    border-top: 1px solid #ddd; 
 }
 
-/* 2. Conteneur individuel de chaque Morpion */
 .morpion-container {
-    /* Taille fixe pour chaque morpion, assurant un alignement propre */
-    width: 60px;  /* Ajuste cette valeur si tes images sont plus grandes ou petites */
+    width: 60px;  
     height: 60px; 
-    margin: 5px;  /* Espace entre les morpions */
+    margin: 5px;  
     
-    /* Centrage de l'image à l'intérieur du conteneur */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
         
-    /* Visuel (facultatif) */
     border: 1px dashed #aaa; 
     border-radius: 4px;
     background-color: #fff;
-    cursor: grab; /* Indique qu'il peut être déplacé */
+    cursor: grab; 
 }
 
-/* 3. L'image du Morpion elle-même */
 .image-morpion {
-    /* L'image prend 100% de la taille de son conteneur (morpion-container) */
     max-width: 100%; 
     max-height: 100%; 
-    /* S'assure que l'image ne dépasse pas sa boîte sans être déformée */
     object-fit: contain; 
 }
 
@@ -299,12 +277,3 @@ footer {
     object-fit: contain; 
 }
 
-/* 4. Amélioration de l'espace grille pour la clarté */
-/* S'assurer que les cellules de la grille sont suffisamment grandes pour accueillir une image-morpion */
-/* (Basé sur ton code de la question précédente) */
-.cellule {
-    /* Assure que la cellule est au moins aussi grande que le morpion qu'elle doit accueillir */
-    min-width: 70px; 
-    min-height: 70px;
-    /* ... (le reste de tes styles de cellule) ... */
-}

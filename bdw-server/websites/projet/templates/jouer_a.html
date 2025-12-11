@@ -9,10 +9,9 @@
             {%if REQUEST_VARS['equipe1_active']%}               
 
             <div>
-                <p>ALED</p>
                 <label for = "sorts_equipe">Sorts disponibles :</label>
                 <select id="sorts_equipe" name="sorts_equipe">
-                    <option value="Non">--Sélectionner un sort--</option>
+                    <option value="33">--Ne pas lancer un sort--</option>
                     <option value="0">Sort de feu</option>
                     <option value="1">Sort de soin</option>
                     <option value="2">Armageddon</option> 
@@ -60,10 +59,16 @@
                                     <p>PV : {{SESSION['TAB'][i][j][1][3]}}</p>
                                     <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
                                 </div>  
-                            {%else%} <!-- sinon on affiche le bouton de selection-->                                                                                                                                                                
-                                <div class="cellule" id="{{i}},{{j}}">
-                                    <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
-                                </div>                                                                                                                                                            
+                            {%else%} <!-- sinon on affiche le bouton de selection-->  
+                                {%if SESSION['CASES_INUTILISABLES'] and SESSION['CASES_INUTILISABLES'][i] and SESSION['CASES_INUTILISABLES'][i][j] %}
+                                    <div class="cellule" id="{{i}},{{j}}">
+                                        <p>case detruite</p>
+                                    </div>                                    
+                                {%else%}                                                                                                                                                              
+                                    <div class="cellule" id="{{i}},{{j}}">
+                                        <input type="checkbox" value="{{i}},{{j}}" name="case_cible[]" id="case_cible">
+                                    </div>  
+                                {%endif%}                                                                                                                                                          
                             {% endif %}
                 {%endfor%}
                 </div>
@@ -100,7 +105,7 @@
             <div>
                 <label for = "sorts_equipe">Sorts disponibles :</label>
                 <select id="sorts_equipe" name="sorts_equipe">
-                    <option value="Non">--Ne pas lancer un sort--</option>
+                    <option value="33">--Ne pas lancer un sort--</option>
                     <option value="0">Sort de feu</option>
                     <option value="1">Sort de soin</option>
                     <option value="2">Armageddon</option>   

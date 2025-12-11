@@ -396,99 +396,6 @@ def verif_cond_victoire(connexion, dimension, tableau,  morpions_equipe1, morpio
 
 
 
-def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolean_partie, sort, tableau , cord1, cord2, cases_inutilisables):
-
-    
-
-    ''' cette fonction va gerer les lancements des sorts '''
-
-
-    if tableau[cord1][cord2][0] != None : # on verifie que la case ciblée n'est pas vide 
-        morpion_attaque = tableau[cord1][cord2][1][0]
-
-
-
-    reussite = False 
-
-    mana = [2,1,5] # les points de mana que coutent chaque sort
-
-
-
-    if rd.randint(1,100) < 10 * morpion_choisis[5] : # on regarde si le sort est réussi ou non 
-
-        reussite = not(reussite)
-
-
-
-        if not boolean_partie : # rajoute des points de réussite au morpion qui vient de réussir son sort
-
-            morpions_equipe2[morpion_choisis[0]][5] = morpions_equipe2[morpion_choisis[0]][5] + 0.5
-
-        if boolean_partie :
-
-            morpions_equipe1[morpion_choisis[0]][5] = morpions_equipe1[morpion_choisis[0]][5] + 0.5
-
-
-
-        if sort == 0 : # la boule de feu, enleve 3pv à la case attaquée adverse
-
-            if boolean_partie :
-
-                morpions_equipe2[morpion_attaque[0]][3] = morpions_equipe2[morpion_attaque[0]][3] - 3
-
-            else :
-
-                morpions_equipe1[morpion_attaque[0]][3] = morpions_equipe1[morpion_attaque[0]][3] - 3
-
-
-
-        if sort == 1 : # sort de soin gagne 2 pv à la case selectionnée 
-
-            if boolean_partie :
-
-                morpions_equipe1[morpion_attaque[0]][3] = morpions_equipe1[morpion_attaque[0]][3] + 2 
-
-            else :
-
-                morpions_equipe2[morpion_attaque[0]][3] = morpions_equipe2[morpion_attaque[0]][3] + 2 
-
-
-
-        if sort == 2 : # sort armagedon détruit case 
-
-            cases_inutilisables.append([cord1,cord2])
-
-
-
-            if boolean_partie :
-
-                morpions_equipe2[morpion_attaque[0]][3] = 0
-
-            else :
-
-                morpions_equipe2[morpion_attaque[0]][3] = 0 
-
-    
-
-    
-
-    
-
-    if boolean_partie : # enlève des points de mana au morpion qui vient de lancer son sort même si le sort réussit pas 
-
-
-
-        morpions_equipe1[morpion_choisis[0]][4] = morpions_equipe2[morpion_choisis[0]][4] + mana[sort]
-
-    else :
-
-        morpions_equipe2[morpion_choisis[0] in morpions_equipe2][4] = morpions_equipe1[morpion_choisis[0]][4] + mana[sort]
-
-    
-
-    return [morpions_equipe1, morpions_equipe2, cases_inutilisables, reussite ]
-
- 
 
 
 
@@ -562,52 +469,6 @@ def morpions_morts(morpions_equipe1,  morpions_equipe2, tableau):
 
     return [morpions_equipe2,morpions_equipe1,tableau]
 
-
-
-def attaque(connexion, boolean_partie, morpion_choisis, morpions_equipe2, morpions_equipe1, tableau, cord1,cord2):
-
-
-
-    ''' cette fonction va gerer les attaques '''
-
-
-
-    reussite = False 
-
-    morpion_attaquee = tableau[cord1][cord2][1][0]
-
-    
-
-    if rd.randint(1,100) < 10 * morpion_choisis[5] : 
-
-        reussite = not(reussite)
-
-
-
-        if boolean_partie == False: 
-
-
-
-           # rajoute des points de réussite au morpion qui vient de réussir son attaque
-
-            morpions_equipe2[morpion_choisis[0]][5] = morpions_equipe2[morpion_choisis[0]][5] + 0.5 
-
-
-
-            # on déduis l'attaque de l'attaquant aux pv de l'attaqué
-
-            morpions_equipe1[morpion_attaquee[0]][3] = morpions_equipe1[morpion_attaquee[0]][3] - morpions_equipe2[morpion_choisis[0]][6]
-
-
-
-        else :
-
-            morpions_equipe1[morpion_choisis[0]][5] = morpions_equipe1[morpion_choisis[0]][5] + 0.5
-
-            morpions_equipe2[morpion_attaquee[0]][3] = morpions_equipe2[morpion_attaquee[0]][3] - morpions_equipe1[morpion_choisis[0]][6]
-
-
-    return [morpions_equipe1, morpions_equipe2]
 
 
 
@@ -739,4 +600,181 @@ def ajoute_partie(connexion, id_equipe1, id_equipe2):
 
     execute_other_query(connexion, query1, params=[])
 
+
+     
+
+def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolean_partie, sort, tableau , cord1, cord2, 
+          cases_inutilisables):
+    
+    ''' cette fonction va gerer les lancements des sorts et mettre a jour l'action joueur '''
+
+    morpion_attaque = None
+    if tableau[cord1][cord2][0] is not None :
+        morpion_attaque = tableau[cord1][cord2][1][0] # recupere id du morpion attaquee
+
+    reussite = False 
+    mana = [2, 1, 5] # les points de mana que coutent chaque sort (Sort 0, Sort 1, Sort 2)
+
+    numerochoisi2 = None
+    numerochoisi1 = None
+    numeroattaque1 = None
+    numeroattaque2 = None
+
+    for i in range (len(morpions_equipe2)):
+        if morpions_equipe2[i][0] == morpion_choisis[0] :
+            numerochoisi2 = i
+    for i in range (len(morpions_equipe1)):
+        if morpions_equipe1[i][0] == morpion_choisis[0] :
+            numerochoisi1 = i
+
+    if morpion_attaque is not None:
+        for i in range (len(morpions_equipe2)):
+            if morpions_equipe2[i][0] == morpion_attaque :
+                numeroattaque2 = i
+        for i in range (len(morpions_equipe1)):
+            if morpions_equipe1[i][0] == morpion_attaque :
+                numeroattaque1 = i
+
+    morpion_lanceur = None
+    if boolean_partie: # C'est le tour de l'équipe 1
+        if numerochoisi1 is not None:
+            morpion_lanceur = morpions_equipe1[numerochoisi1]
+    else: # C'est le tour de l'équipe 2
+        if numerochoisi2 is not None:
+            morpion_lanceur = morpions_equipe2[numerochoisi2]
+    if sort in [0, 1, 2]:
+        cout = mana[sort] 
+    else:
+        cout = 0
+    mana_lanceur_index = 4 
+    
+    if morpion_lanceur is not None and morpion_lanceur[mana_lanceur_index] >= cout:
+        #morpion_lanceur[mana_lanceur_index] -= cout #tuple alors valeur inchageable
+        reussite = True # Le sort a été lancé avec succès
+
+        if sort == 0: #boule de feu
+            if morpion_attaque is not None:
+                degats = 10 
+                
+                pv_index = 3 
+                if boolean_partie and numeroattaque2 is not None: # Attaque l'équipe 2
+                    morpions_equipe2[numeroattaque2][pv_index] -= degats
+                elif not boolean_partie and numeroattaque1 is not None: # Attaque l'équipe 1
+                    morpions_equipe1[numeroattaque1][pv_index] -= degats
+
+        elif sort == 1:
+            # Sort de soin (cible le Morpion lanceur)
+            soin = 5
+            pv_index = 3
+            morpion_lanceur[pv_index] += soin
+            
+        # armageddon
+        elif sort == 2:
+            if (cord1, cord2) not in cases_inutilisables:
+                cases_inutilisables.append((cord1, cord2))
+        
+
+    else:
+        reussite = False
+        
+    return reussite
+
+
+def attaque(connexion, boolean_partie, morpion_choisis, morpions_equipe2, morpions_equipe1, tableau, cord1,cord2):
+
+
+
+    ''' cette fonction va gerer les attaques '''
+
+
+
+    reussite = False 
+
+    morpion_attaque = tableau[cord1][cord2][1][0]
+
+
+
+    numerochoisi2 = None
+
+    numerochoisi1 = None
+
+
+
+    numeroattaque1 = None
+
+    numeroattaque2 = None
+
+    
+
+    for i in range (len(morpions_equipe2)):
+
+        if morpions_equipe2[i][0] == morpion_choisis[0] :
+
+            numerochoisi2 = i
+
+
+
+    for i in range (len(morpions_equipe1)):
+
+        if morpions_equipe1[i][0] == morpion_choisis[0] :
+
+            numerochoisi1 = i
+
+
+
+    
+
+    for i in range (len(morpions_equipe2)):
+
+        if morpions_equipe2[i][0] == morpion_attaque :
+
+            numeroattaque2 = i
+
+
+
+    for i in range (len(morpions_equipe1)):
+
+        if morpions_equipe1[i][0] == morpion_attaque :
+
+            numeroattaque1 = i
+
+     
+
+    
+
+    if rd.randint(1,100) < 10 * morpion_choisis[5] : # on regarde si l'attaque réussit
+
+
+
+        reussite = not(reussite)
+
+
+
+        if boolean_partie == False: 
+
+
+
+           # rajoute des points de réussite au morpion qui vient de réussir son attaque
+
+            morpions_equipe2[numerochoisi2][5] = morpions_equipe2[numerochoisi2][5] + 0.5 
+
+
+
+            # on déduis l'attaque de l'attaquant aux pv de l'attaqué
+
+            morpions_equipe1[numeroattaque1][3] = morpions_equipe1[numeroattaque1][3] - morpions_equipe2[numerochoisi2][6]
+
+
+
+        else :
+
+            morpions_equipe1[numerochoisi1][5] = morpions_equipe1[numerochoisi1][5] + 0.5
+
+            morpions_equipe2[numeroattaque2][3] = morpions_equipe2[numeroattaque2][3] - morpions_equipe1[numerochoisi1][6]
+
+
+
+
+
+    return [morpions_equipe1, morpions_equipe2]
       
