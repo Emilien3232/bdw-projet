@@ -1,4 +1,5 @@
 from controleurs.includes import add_activity
+from datetime import datetime
 from model.model_pg import get_instances , ajoute_config , supp_config
 
 REQUEST_VARS['liste_equipes'] = get_instances(SESSION['CONNEXION'], 'equipe')
@@ -19,6 +20,7 @@ if POST :
         SESSION['EQUIPE_1'] = equipe_1_complete
         SESSION['EQUIPE_2'] = equipe_2_complete
         REQUEST_VARS['message_confirmation'] = f"""La partie a été créée avec succès et les équipes : {SESSION['EQUIPE_1'][3]} ET {SESSION['EQUIPE_2'][3]} sont prêtes pour la partie ! allez dans JOUER."""
+        SESSION['DATE_DEBUT_PARTIE'] = datetime.now().replace(microsecond=0)
 
 add_activity(SESSION['HISTORIQUE'], "consultation de la page de création de partie")
 

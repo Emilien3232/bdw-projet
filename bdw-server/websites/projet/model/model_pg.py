@@ -291,31 +291,72 @@ def verif_cond_victoire(connexion, dimension, tableau,  morpions_equipe1, morpio
 
     '''
 
-
-
     nb_tours = nb_tours +1
 
+# test ligne ou colonne ou diagonale pour dimension 3
+    if dimension == 3 :
+        for i in range (3):
+
+            if tableau[i][0][0] != None and tableau[i][1][0] != None and tableau[i][2][0] != None : #on verifie si les cases de la ligne i sont remplies
+
+                if tableau[i][0][0] == tableau[i][1][0] == tableau[i][2][0] : # on verifie si les cases de la ligne i ont le meme numéro d'équipe
+
+                    return [True , tableau[i][0][0] , nb_tours ] # on retourne vrai et le numéro de l'équipe gagnante
+
+            if tableau[0][i][0] != None and tableau[1][i][0] != None and tableau[2][i][0] != None : #on verifie si les cases de la colonne i sont remplies
+
+                if tableau[0][i][0] == tableau[1][i][0] == tableau[2][i][0] : # on verifie si les cases de la colonne i ont le meme numéro d'équipe
+
+                    return [True , tableau[0][i][0] , nb_tours ] 
 
 
-# test les lignes
+
+        if tableau[0][0][0] != None and tableau[1][1][0] != None and tableau[2][2][0] != None : # on verifie si les cases de la diagonale principale sont remplies (gauche à droite)
+
+            if tableau[0][0][0] == tableau[1][1][0] ==tableau[2][2][0] : # on verifie si les cases de la diagonale principale ont le meme numéro d'équipe
+
+                return [True , tableau[0][0][0] , nb_tours ] 
 
 
 
-    for j in range (dimension) :
+        if tableau[0][2][0] != None and tableau[1][1][0] != None and tableau[2][0][0] != None : # on verifie si les cases de la diagonale secondaire sont remplies (droite à gauche)
 
-        if (tableau[0][j][0] == tableau[1][j][0] ) and (tableau[0][j][0] == tableau[2][j][0] ):
+            if tableau[0][2][0] == tableau[1][1][0] ==tableau[2][0][0] :
 
-            return (True, tableau[0][j][0])
+                return [True , tableau[0][2][0] , nb_tours ]
+
+# de meme maniere pour dimension 4
+    if dimension ==4 :
+
+        for i in range (4):
+
+            if tableau[i][0][0] != None and tableau[i][1][0] != None and tableau[i][2][0] != None and tableau[i][3][0] != None :
+
+                if tableau[i][0][0] == tableau[i][1][0] == tableau[i][2][0] == tableau[i][3][0] :
+
+                    return [True , tableau[i][0][0] , nb_tours ] 
+
+            if tableau[0][i][0] != None and tableau[1][i][0] != None and tableau[2][i][0] != None and tableau[3][i][0] != None :
+
+                if tableau[0][i][0] == tableau[1][i][0] == tableau[2][i][0] == tableau[3][i][0] :
+
+                    return [True , tableau[0][i][0] , nb_tours ] 
 
 
 
-# test les colonnes
+        if tableau[0][0][0] != None and tableau[1][1][0] != None and tableau[2][2][0] != None and tableau[3][3][0] != None :
 
-    for i in range (dimension) :
+            if tableau[0][0][0] == tableau[1][1][0] ==tableau[2][2][0] ==tableau[3][3][0]:
 
-        if (tableau[i][0][0] == tableau[i][1][0] ) and (tableau[i][0][0] == tableau[i][2][0] ):
+                return [True , tableau[0][0][0] , nb_tours ] 
 
-            return (True, tableau[i][0][0])
+
+
+        if tableau[0][3][0] != None and tableau[1][2][0] != None and tableau[2][1][0] != None and tableau[3][0][0] != None :
+
+            if tableau[0][3][0] == tableau[1][2][0] ==tableau[2][1][0] ==tableau[3][0][0]:
+
+                return [True , tableau[0][3][0] , nb_tours ]
 
         
 
@@ -323,11 +364,11 @@ def verif_cond_victoire(connexion, dimension, tableau,  morpions_equipe1, morpio
 
     if morpions_equipe1 == []:
 
-        return ( True, 2 )
+        return  [True, 2, nb_tours ]
 
     if morpions_equipe2 == []:
 
-        return ( True, 1 )
+        return [True , 1, nb_tours ]
 
 
 
@@ -335,17 +376,15 @@ def verif_cond_victoire(connexion, dimension, tableau,  morpions_equipe1, morpio
 
     if nb_tours == nb_tours_max :
 
-        return ( True , 'match nul' )
+        return [True , 0 , nb_tours ] # match nul
 
     
 
-    return (nb_tours)
+    return [False , None , nb_tours ]
 
 
 
-def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolean_partie, sort, tableau , cord1, cord2, 
-
-          cases_inutilisables):
+def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolean_partie, sort, tableau , cord1, cord2, cases_inutilisables):
 
     
 
@@ -416,6 +455,8 @@ def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolea
             else :
 
                 morpions_equipe2[morpion_attaque[0]][3] = 0 
+
+    return None
 
     
 
@@ -554,9 +595,125 @@ def attaque(connexion, boolean_partie, morpion_choisis, morpions_equipe2, morpio
             morpions_equipe2[morpion_attaquee[0]][3] = morpions_equipe2[morpion_attaquee[0]][3] - morpions_equipe1[morpion_choisis[0]][6]
 
 
-
-
-
     return [morpions_equipe1, morpions_equipe2]
+
+
+
+def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, attaque, boolean_partie ):
+
+
+
+    if boolean_partie :
+
+        joueuse = 1
+
+    if not boolean_partie :
+
+        joueuse = 2
+
+
+
+    id_partie = count_instances(connexion, 'partie')[0][0]/2 + 1
+
+    id_ligne = count_instances(connexion, 'ligne_journal')[0][0] +1
+
+    date = datetime.now().replace(microsecond=0)
+
+
+
+
+
+    if sorts == 0 :
+
+        query = f'''
+
+        INSERT INTO ligne_journal (id_ligne,date_action, description, id_partie )
+
+        values ({id_ligne}, "{date}","la joueuse {joueuse} a lancé le sort boule de feu sur la case ({cord1};{cord2})", {id_partie} ) '''
+
+            
+
+    elif sorts == 1 :
+
+       query =  f''' 
+
+        INSERT INTO ligne_journal (id_ligne, date_action, description , id_partie )
+
+        values ({id_ligne},"{date}", "la joueuse {joueuse} à soigné le morpion de la case ({cord1};{cord2}) avec un sort de soin", {id_partie} )  '''
+
+ 
+
+    elif sorts == 2 :
+
+        query =  f''' 
+
+        INSERT INTO ligne_journal (id_ligne,date_action, description , id_partie )
+
+        values ({id_ligne},"{date}", "la joueuse {joueuse} à lancé le sort armagedon sur la case ({cord1};{cord2})", {id_partie} )  '''
+
+
+
+
+
+    elif attaque != None :
+
+        query =  f''' 
+
+        INSERT INTO ligne_journal (id_ligne,date_action, description , id_partie )
+
+        values ({id_ligne}, '{date}',"la joueuse {joueuse} à attaquée la case ({cord1};{cord2}) avec le morpion {morpion_choisis[1]}", {id_partie} )  '''
+
+
+
+    
+
+    else :
+
+        query =  f''' 
+
+        INSERT INTO ligne_journal (id_ligne , date_action , description , id_partie ) 
+
+        values ({id_ligne},'{date}' , '' , '')  '''
+        print("aaaaaaaaa")
+
+
+    execute_other_query(connexion, query, params=[])
+    return None
+
+
+#la joueuse {joueuse} à joué {morpion_choisis[1]} dans la case ({cord1};{cord2})
+
+
+
+
+
+
+def fin_partie(connexion, date_debut, id_equipe1, id_equipe2):
+
+
+
+    date = datetime.now().replace(microsecond=0)
+
+    id_partie = count_instances(connexion, 'partie')[0][0]/2 + 1
+
+    id_config = count_instances(connexion, 'configuration')[0][0] + 1
+
+
+
+    query1 = f''' INSERT INTO partie (id_partie, date_debut, date_fin, id_configuration, id_equipe)
+
+    values ({id_partie},{date_debut},{date},{id_config},{id_equipe1})'''
+
+
+
+    query2 = f''' INSERT INTO partie (id_partie, date_debut, date_fin, id_configuration, id_equipe)
+
+    values ({id_partie},{date_debut},{date},{id_config},{id_equipe2})'''
+
+
+
+    execute_other_query(connexion, query1, params=[])
+
+    execute_other_query(connexion, query2, params=[])
 
 

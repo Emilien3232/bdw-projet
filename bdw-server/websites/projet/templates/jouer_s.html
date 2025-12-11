@@ -24,6 +24,9 @@
                 {% if REQUEST_VARS['message_erreur'] %} <!--si on recoit un message d'erreur du controleur apres la gestion de la methiode post-->
                     <br><div style="color: red; background-color: #FFDDDD; padding: 10px; border: 1px solid red; border-radius: 5px;"><p>{{ REQUEST_VARS['message_erreur'] }}</p></div>
                 {% endif %}
+                {% if REQUEST_VARS['message_victoire'] %} <!--si on recoit un message de victoire du controleur apres la gestion de la methiode post-->
+                    <br><div style="color: green; background-color: #DDFFDD; padding: 10px; border: 1px solid green; border-radius: 5px;"><p>{{ REQUEST_VARS['message_victoire'] }}</p></div>
+                {% endif %}
             </div>
             <div class="grille-container">
             {%for i in range(SESSION['CONFIG_PARTIE'][2])%}
@@ -33,7 +36,11 @@
                 {%for j in range(SESSION['CONFIG_PARTIE'][2])%}
                         {% set case = ligne[j] %}
                             {% if case is iterable and case|length > 0 and case[0] %} <!--si la case de la grille contient un morpion, on affiche l'image de ce morpion-->
-                                <div style ="width: 160px;height: 120px;border: 1px solid #333;background-color: #f0f0f0;display: flex;justify-content: center;align-items: center;user-select: none;transition: background-color 0.2s ease;"id="{{i}},{{j}}"                                                                                                                                                                     >
+                                {% if SESSION['TAB'][i][j][0] == SESSION['EQUIPE_1'][0] %}
+                                <div style ="width: 160px;height: 120px;border: 1px solid #333; background-color: #ca1414 ; display: flex;justify-content: center;align-items: center;user-select: none;transition: background-color 0.2s ease;"id="{{i}},{{j}}">
+                                {%elif SESSION['TAB'][i][j][0] == SESSION['EQUIPE_2'][0]%}
+                                <div style ="width: 160px;height: 120px;border: 1px solid #333;background-color: #0848d3;display: flex;justify-content: center;align-items: center;user-select: none;transition: background-color 0.2s ease;"id="{{i}},{{j}}">
+                                {%endif%}
                                     <img src="{{ SESSION['DIRECTORY'] }}{{ SESSION['TAB'][i][j][1][2] }}" alt="Morpion" class="image-morpion">
                                 </div>
                             {%else%} <!-- sinon on affiche le bouton de selection-->                                                                                                                                                                
@@ -44,17 +51,16 @@
                 {%endfor%}
                 </div>
                 {% else %}
-                    <p>Erreur : La grille de jeu n'est pas correctement initialisée.</p>
+                    <p>Erreur , chargement de la grille</p>
                 {% endif %}
             {%endfor%}
             </div>
             <div>
-                <h3>Tour restant : {{SESSION['CONFIG_PARTIE'][1]}}</h3>
-                <h3>Équipe en action : 
-                    {%if REQUEST_VARS['equipe1_active']%}
-                        {{SESSION['EQUIPE_1'][3]}}
+                <h3>Tour restant : {{REQUEST_VARS['nb_tours_restant']}}</h3>
+                    {%if REQUEST_VARS['equipe1_active']%}               
+                        <h3 style = "font-style: italic ; color : #ca1414 ">Équipe en action : {{SESSION['EQUIPE_1'][3]}}
                     {%else%}
-                        {{SESSION['EQUIPE_2'][3]}}
+                        <h3 style = "font-style: italic ; color : #0848d3 ">Équipe en action : {{SESSION['EQUIPE_1'][3]}}
                     {%endif%}
                 </h3>
             </div>
