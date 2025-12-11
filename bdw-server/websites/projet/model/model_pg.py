@@ -234,6 +234,18 @@ def supp_config(connexion):
 
     return None
 
+
+def supp_partie(connexion):
+    """ 
+    une fonction qui supprime les parties existantes dans la bdw
+    """
+    query = f""" DELETE 
+    from partie 
+    """
+    execute_other_query(connexion, query, params=[])
+
+    return None
+
 def supp_equipe(connexion,nom):
     """ 
     une fonction qui prend en entrée le nom d'une équipe et qui efface les données de l'équipe 
@@ -391,8 +403,8 @@ def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolea
     ''' cette fonction va gerer les lancements des sorts '''
 
 
-
-    morpion_attaque = tableau[cord1][cord2][1][0]
+    if tableau[cord1][cord2][0] != None : # on verifie que la case ciblée n'est pas vide 
+        morpion_attaque = tableau[cord1][cord2][1][0]
 
 
 
@@ -456,7 +468,7 @@ def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolea
 
                 morpions_equipe2[morpion_attaque[0]][3] = 0 
 
-    return None
+    
 
     
 
@@ -470,7 +482,7 @@ def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolea
 
     else :
 
-        morpions_equipe2[morpion_choisis[0]][4] = morpions_equipe1[morpion_choisis[0]][4] + mana[sort]
+        morpions_equipe2[morpion_choisis[0] in morpions_equipe2][4] = morpions_equipe1[morpion_choisis[0]][4] + mana[sort]
 
     
 
@@ -613,7 +625,7 @@ def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, att
 
 
 
-    id_partie = count_instances(connexion, 'partie')[0][0]/2 + 1
+    id_partie = count_instances(connexion, 'partie')[0][0]
 
     id_ligne = count_instances(connexion, 'ligne_journal')[0][0] +1
 
@@ -629,7 +641,7 @@ def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, att
 
         INSERT INTO ligne_journal (id_ligne,date_action, description, id_partie )
 
-        values ({id_ligne}, "{date}","la joueuse {joueuse} a lancé le sort boule de feu sur la case ({cord1};{cord2})", {id_partie} ) '''
+        values ({id_ligne}, '{date}',"la joueuse{joueuse} lance une boule de feu en ({cord1};{cord2})", {id_partie} ) '''
 
             
 
@@ -639,7 +651,7 @@ def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, att
 
         INSERT INTO ligne_journal (id_ligne, date_action, description , id_partie )
 
-        values ({id_ligne},"{date}", "la joueuse {joueuse} à soigné le morpion de la case ({cord1};{cord2}) avec un sort de soin", {id_partie} )  '''
+        values ({id_ligne},"{date}", "la joueuse{joueuse} soigne {morpion_choisis[1]} avec un sort de soin", {id_partie} )  '''
 
  
 
@@ -661,7 +673,7 @@ def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, att
 
         INSERT INTO ligne_journal (id_ligne,date_action, description , id_partie )
 
-        values ({id_ligne}, '{date}',"la joueuse {joueuse} à attaquée la case ({cord1};{cord2}) avec le morpion {morpion_choisis[1]}", {id_partie} )  '''
+        values ({id_ligne}, '{date}','la joueuse{joueuse} attaque avec {morpion_choisis[1]} la case {cord1};{cord2}', {id_partie} )  '''
 
 
 
@@ -673,8 +685,7 @@ def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, att
 
         INSERT INTO ligne_journal (id_ligne , date_action , description , id_partie ) 
 
-        values ({id_ligne},'{date}' , '' , '')  '''
-        print("aaaaaaaaa")
+        values ({id_ligne},'{date}' , 'la joueuse{joueuse} joue {morpion_choisis[1]} en ({cord1};{cord2})' , {id_partie})  '''
 
 
     execute_other_query(connexion, query, params=[])
@@ -687,8 +698,29 @@ def ajoute_journal(connexion,cord1, cord2, tableau , morpion_choisis, sorts, att
 
 
 
+def fin_partie(connexion):
 
-def fin_partie(connexion, date_debut, id_equipe1, id_equipe2):
+
+
+    date = datetime.now().replace(microsecond=0)
+
+    id_partie = count_instances(connexion, 'partie')[0][0]/2
+
+
+
+    query = f'''UPDATE partie
+
+    SET date_fin = {date}
+
+    WHERE id_partie = {id_partie}'''
+
+
+
+    execute_other_query(connexion, query, params=[])
+
+
+
+def ajoute_partie(connexion, id_equipe1, id_equipe2):
 
 
 
@@ -696,24 +728,15 @@ def fin_partie(connexion, date_debut, id_equipe1, id_equipe2):
 
     id_partie = count_instances(connexion, 'partie')[0][0]/2 + 1
 
-    id_config = count_instances(connexion, 'configuration')[0][0] + 1
+    id_config = count_instances(connexion, 'configuration')[0][0] 
 
 
 
-    query1 = f''' INSERT INTO partie (id_partie, date_debut, date_fin, id_configuration, id_equipe)
+    query1 = f''' INSERT INTO partie (id_partie, date_debut, id_configuration, id_equipe)
 
-    values ({id_partie},{date_debut},{date},{id_config},{id_equipe1})'''
-
-
-
-    query2 = f''' INSERT INTO partie (id_partie, date_debut, date_fin, id_configuration, id_equipe)
-
-    values ({id_partie},{date_debut},{date},{id_config},{id_equipe2})'''
-
+    values ({id_partie},'{date}',{id_config},{id_equipe1})'''
 
 
     execute_other_query(connexion, query1, params=[])
 
-    execute_other_query(connexion, query2, params=[])
-
-
+      

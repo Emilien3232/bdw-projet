@@ -42,6 +42,7 @@ if SESSION['CONFIG_PARTIE'] is not None :
     REQUEST_VARS['nb_tours_restant'] = SESSION['CONFIG_PARTIE'][1] - cmpt -1
         
     if 'valider_deplacement' in POST :
+
         #gestion des erreurs de selection de morpion et case cible
         if not 'morpion_selectionne[]' in POST or not 'case_cible[]' in POST :
             REQUEST_VARS['message_erreur'] = "Erreur : Vous devez sélectionner un morpion à déplacer et une case cible pour le déplacement."
@@ -50,9 +51,8 @@ if SESSION['CONFIG_PARTIE'] is not None :
         elif len(POST['case_cible[]']) > 1 :
             REQUEST_VARS['message_erreur'] = "Erreur : Vous ne pouvez cibler qu'une seule case à la fois."
 
-
         else : #gestion action
-            if POST['sort_equipe'] == "Non" : #si aucun sort n'est selectionné on fait un déplacement classique
+            if POST['sorts_equipe'] == "Non" : #si aucun sort n'est selectionné on fait un déplacement classique
                 coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
                 coord_2 = int(POST['case_cible[]'][0].split(',')[1])
                 morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion sélectionné
@@ -77,27 +77,30 @@ if SESSION['CONFIG_PARTIE'] is not None :
                     REQUEST_VARS['message_victoire'] = "Match nul ! La partie se termine sans vainqueur après {} tours.".format( SESSION['CONFIG_PARTIE'][1] )
                     SESSION['TAB'] = tabinit
                     SESSION['NB_TOURS_JOUES'] = 0
+                #fonction journalisation
+
                 if equipe1_active :
                     equipe1_active = False
                     SESSION['EQUIPE_1_ACTIVE'] = False
                 else :
-                    equipe1_active = True #on change l'équipe active après un déplacement réussi
+                    equipe1_active = True #on change l'équipe active 
                     SESSION['EQUIPE_1_ACTIVE'] = True
-                REQUEST_VARS['equipe1_active'] = equipe1_active
-                #fonction journalisation
-            if POST['sort_equipe'] != "Non" : #gestion des sorts
+                
+            if POST['sorts_equipe'] != "Non" : #gestion des sorts
                 coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
                 coord_2 = int(POST['case_cible[]'][0].split(',')[1])
-                sort_selec = POST['sort_equipe']
+                sort_selec = POST['sorts_equipe']
                 morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion selectionné
                 SESSION['TAB'] = tab #on met à jour la grille de jeu affichée
-                sort(SESSION['CONNEXION'], get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_1'][0]) , get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_2'][0]) , equipe1_active , sort_selec , tab , coord_1 , coord_2)
+                sorts(SESSION['CONNEXION'], morpion_action, get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_1'][0]) , get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_2'][0]) , equipe1_active , sort_selec , tab , coord_1 , coord_2,tabcaseinutilisables)
+
+
                 if equipe1_active :
                     equipe1_active = False
                     SESSION['EQUIPE_1_ACTIVE'] = False
                 else :
-                    equipe1_active = True #on change l'équipe active après un déplacement réussi
-
+                    equipe1_active = True #on change l'équipe active 
+                    SESSION['EQUIPE_1_ACTIVE'] = True
 
 
 
