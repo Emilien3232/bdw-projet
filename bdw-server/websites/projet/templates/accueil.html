@@ -3,37 +3,42 @@
 {% block main_content %}
 
 <!-- #Fonctionnalité 1 : accueil et statistiques -->
-<div class = "accueil-interface">
-	<h2>STATISTIQUES</h2>
+<div class="accueil-image">
+		
 
-	<!-- #1 . 3 instances aux choix-->
-	<p id="parag_description">
-		Voici le nombre d'instances des tables : "equipes", "parties" et "morpion" dans la base de données:
-	</p>
-	<ul>
-		<li>{{REQUEST_VARS['nb_equipe']}}</li>
-		<li>{{REQUEST_VARS['nb_partie']}}</li>
-		<li>{{REQUEST_VARS['nb_morpion']}}</li>
-	</ul>
+	<div class = "accueil-interface">
+		<h2>STATISTIQUES</h2>
 
-	<!-- #2 la durée de la partie la plus longue et la plus courte-->
-	<p id="parag_description">
-		Voici la durée des parties les plus courtes et les plus longues enregistrées dans la base de données:
-	</p>
-	<ul>
-		<li>L'identifiant de la partie la plus courte est : {{REQUEST_VARS['partie_courte'][0]}} , avec :{{REQUEST_VARS['partie_courte'][3]}} secondes  </li>
-		<li>L'identifiant de la partie la plus longue est : {{REQUEST_VARS['partie_longue'][0]}} , avec :{{REQUEST_VARS['partie_longue'][3]}} secondes </li>
-	</ul>
+		<!-- #1 . 3 instances aux choix-->
+		<p id="parag_description">
+			Voici le nombre d'instances des tables : "equipes", "parties" et "morpion" dans la base de données:
+		</p>
+		<ul>
+			<li>{{REQUEST_VARS['nb_equipe']}}</li>
+			<li>{{REQUEST_VARS['nb_partie']}}</li>
+			<li>{{REQUEST_VARS['nb_morpion']}}</li>
+		</ul>
 
-	<!-- #3 la moyenne de nombre de ligne de journalaistion par couple mois ,  annnée-->
-	<p id="parag_description">
-		Voici le nombre moyen de lignes de journalisation par mois et par année :
-	<ul>
-		{%for i in REQUEST_VARS['moyenne_journalistaion']%}	
-		<li> Pour le mois {{i[1]}} de l'année {{i[0]}}, le nombre moyen de lignes est : {{i[3]}} lignes </li>	
-		{%endfor%}
-	</ul>
-</div>>
+		<!-- #2 la durée de la partie la plus longue et la plus courte-->
+		<p id="parag_description">
+			Voici la durée des parties les plus courtes et les plus longues enregistrées dans la base de données:
+		</p>
+		<ul>
+			<li>L'identifiant de la partie la plus courte est : {{REQUEST_VARS['partie_courte'][0]}} , avec :{{REQUEST_VARS['partie_courte'][3]}} secondes  </li>
+			<li>L'identifiant de la partie la plus longue est : {{REQUEST_VARS['partie_longue'][0]}} , avec :{{REQUEST_VARS['partie_longue'][3]}} secondes </li>
+		</ul>
+
+		<!-- #3 la moyenne de nombre de ligne de journalaistion par couple mois ,  annnée-->
+		<p id="parag_description">
+			Voici le nombre moyen de lignes de journalisation par mois et par année :
+		<ul>
+			{%for i in REQUEST_VARS['moyenne_journalistaion']%}	
+			<li> Pour le mois {{i[1]}} de l'année {{i[0]}}, le nombre moyen de lignes est : {{i[3]}} lignes </li>	
+			{%endfor%}
+		</ul>
+	</div>
+	<img src="{{ SESSION['DIRECTORY'] }}/static/img/tuto.png" alt="Image de morpion accueil" class="image-accueil" width="800" height="740">
+</div>
 {% include 'message.html' %}
 
 {% endblock %}

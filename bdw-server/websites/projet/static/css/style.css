@@ -72,7 +72,6 @@ footer {
 	display: flex;
 	justify-content: space-around;
     background-color: #1f5797;
-    border-radius: 1em;
 }
 
 .fond-jaune {
@@ -135,7 +134,10 @@ footer {
     font-weight: bold;
     color: #2c3e50;
 }
-
+.accueil-image {
+    display: flex;
+    flex-direction: row;
+}
 .accueil-interface {
     display: flex;           
     flex-direction: column;     
@@ -145,6 +147,14 @@ footer {
     padding: 20px;          
 }
 
+.ajouter-interface {
+    display: flex;           
+    flex-direction: column;     
+    width: 100%;             
+    min-height: 80vh;        
+    gap: 20px;              
+    padding: 20px;         
+}
 
 /* Styles pour la grille de jeu */
 .grille-container {
