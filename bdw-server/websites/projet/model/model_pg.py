@@ -649,7 +649,9 @@ def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolea
     mana_lanceur_index = 4 
     
     if morpion_lanceur is not None and morpion_lanceur[mana_lanceur_index] >= cout:
-        #morpion_lanceur[mana_lanceur_index] -= cout #tuple alors valeur inchageable
+        lis = list(morpion_lanceur) 
+        lis[mana_lanceur_index] -= cout
+        morpion_lanceur = tuple(lis)
         reussite = True # Le sort a été lancé avec succès
 
         if sort == 0: #boule de feu
@@ -658,9 +660,15 @@ def sorts(connexion, morpion_choisis, morpions_equipe1, morpions_equipe2, boolea
                 
                 pv_index = 3 
                 if boolean_partie and numeroattaque2 is not None: # Attaque l'équipe 2
-                    morpions_equipe2[numeroattaque2][pv_index] -= degats
+                    lisequipe2 = list(morpions_equipe2[numeroattaque2])
+                    lisequipe2[pv_index] -= degats
+                    morpions_equipe2[numeroattaque2] = tuple(lisequipe2)
+                    #morpions_equipe2[numeroattaque2][pv_index] -= degats    
                 elif not boolean_partie and numeroattaque1 is not None: # Attaque l'équipe 1
-                    morpions_equipe1[numeroattaque1][pv_index] -= degats
+                    lisequipe1 = list(morpions_equipe1[numeroattaque1])
+                    lisequipe1[pv_index] -= degats
+                    morpions_equipe1[numeroattaque1] = tuple(lisequipe1)
+                    #morpions_equipe1[numeroattaque1][pv_index] -= degats
 
         elif sort == 1:
             # Sort de soin (cible le Morpion lanceur)

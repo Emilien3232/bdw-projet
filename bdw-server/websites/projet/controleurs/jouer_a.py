@@ -1,5 +1,5 @@
 from controleurs.includes import add_activity
-from model.model_pg import get_morpion_par_equipe , get_morpion_par_id , verif_cond_victoire , sorts
+from model.model_pg import get_morpion_par_equipe , get_morpion_par_id , verif_cond_victoire , sorts ,attaque
 #on verifie si les variables sont bine initialisées notamment CONFIG_PARTE etant donné que on ne peut pas commencé de partie sans configuration
 if 'EQUIPE_1_ACTIVE' not in SESSION:
     SESSION['EQUIPE_1_ACTIVE'] = True
@@ -22,7 +22,7 @@ if SESSION['CONFIG_PARTIE'] is not None :
     REQUEST_VARS['morpion_equipe_2'] = get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_2'][0])
     REQUEST_VARS['nb_morpion_equipe_1'] = len(REQUEST_VARS['morpion_equipe_1']) #on calcule le nombre de morpions pour chaque équipe pour la longueur des grilles d'affichage des morpions
     REQUEST_VARS['nb_morpion_equipe_2'] = len(REQUEST_VARS['morpion_equipe_2'])
-    equipe1_active = SESSION['EQUIPE_1_ACTIVE'] #par défaut l'équipe 1 commence toujours
+    equipe1_active = SESSION['EQUIPE_1_ACTIVE'] 
     tab = SESSION['TAB']
     tabcaseinutilisables = SESSION['CASES_INUTILISABLES'] #liste des cases inutilisables pour les sorts
     tabinit_caseinutilisables = [] #en fin de partie on réinitialise la grille des cases inutilisables alors on reprend le code d'initialisation du init.py
@@ -52,7 +52,37 @@ if SESSION['CONFIG_PARTIE'] is not None :
             REQUEST_VARS['message_erreur'] = "Erreur : Vous ne pouvez cibler qu'une seule case à la fois."
 
         else : #gestion action
-            if POST['sorts_equipe'] == "33" : #si aucun sort n'est selectionné on fait un déplacement classique
+
+                
+            if POST['sorts_equipe'] != "33" : #gestion des sorts
+                coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
+                coord_2 = int(POST['case_cible[]'][0].split(',')[1])
+                sort_selec = int(POST['sorts_equipe'][0])
+                morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion selectionné
+                SESSION['TAB'] = tab #on met à jour la grille de jeu affichée
+                sorts(SESSION['CONNEXION'], morpion_action, get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_1'][0]) , get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_2'][0]) , equipe1_active , sort_selec , tab , coord_1 , coord_2,tabcaseinutilisables)
+
+
+                if equipe1_active :
+                    equipe1_active = False
+                    SESSION['EQUIPE_1_ACTIVE'] = False
+                else :
+                    equipe1_active = True #on change l'équipe active 
+                    SESSION['EQUIPE_1_ACTIVE'] = True
+            elif 'attaque ' in POST : #gestion des attaques
+                coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
+                coord_2 = int(POST['case_cible[]'][0].split(',')[1])
+                sort_selec = int(POST['sorts_equipe'][0])
+                morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion selectionné
+                SESSION['TAB'] = tab #on met à jour la grille de jeu affichée
+                attaque(SESSION['CONNEXION'],equipe1_active,moprion_action,get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_2'][0]) , get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_1'][0]),tab,coord_1,coord_2)
+                if equipe1_active :
+                    equipe1_active = False
+                    SESSION['EQUIPE_1_ACTIVE'] = False
+                else :
+                    equipe1_active = True #on change l'équipe active 
+                    SESSION['EQUIPE_1_ACTIVE'] = True
+            elif POST['sorts_equipe'] == "33" : #si aucun sort n'est selectionné on fait un déplacement classique
                 coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
                 coord_2 = int(POST['case_cible[]'][0].split(',')[1])
                 morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion sélectionné
@@ -85,36 +115,5 @@ if SESSION['CONFIG_PARTIE'] is not None :
                 else :
                     equipe1_active = True #on change l'équipe active 
                     SESSION['EQUIPE_1_ACTIVE'] = True
-                
-            if POST['sorts_equipe'] != "33" : #gestion des sorts
-                coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
-                coord_2 = int(POST['case_cible[]'][0].split(',')[1])
-                sort_selec = int(POST['sorts_equipe'][0])
-                morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion selectionné
-                SESSION['TAB'] = tab #on met à jour la grille de jeu affichée
-                sorts(SESSION['CONNEXION'], morpion_action, get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_1'][0]) , get_morpion_par_equipe(SESSION['CONNEXION'], SESSION['EQUIPE_2'][0]) , equipe1_active , sort_selec , tab , coord_1 , coord_2,tabcaseinutilisables)
-
-
-                if equipe1_active :
-                    equipe1_active = False
-                    SESSION['EQUIPE_1_ACTIVE'] = False
-                else :
-                    equipe1_active = True #on change l'équipe active 
-                    SESSION['EQUIPE_1_ACTIVE'] = True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 add_activity(SESSION['HISTORIQUE'], "consultation de la page Partie Simple")
 

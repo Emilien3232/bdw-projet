@@ -48,6 +48,8 @@ if SESSION['CONFIG_PARTIE'] is not None :
             coord_1= int(POST['case_cible[]'][0].split(',')[0]) #on recupere les coordonnées de la case cible (str -> int)
             coord_2 = int(POST['case_cible[]'][0].split(',')[1])
             morpion_action = get_morpion_par_id(SESSION['CONNEXION'],POST['morpion_selectionne[]'][0])[0] #récupération des infos du morpion sélectionné
+            
+            
             #on ajoute dans le tableau les données recueillies
             tab[coord_1][coord_2] = [ (SESSION['EQUIPE_1'][0] if equipe1_active else SESSION['EQUIPE_2'][0]) , morpion_action ]
             SESSION['TAB'] = tab #on met à jour la grille de jeu affichée
